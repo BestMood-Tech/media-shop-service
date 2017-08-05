@@ -69,6 +69,7 @@ export class Profile {
         address: userData.address
       },
     };
+    console.log('params =', params);
     return this.db.put(params).promise()
       .then(() => Promise.resolve({ statusCode: 201, body: params.Item }))
       .catch((error) => Promise.reject(error));
@@ -87,7 +88,7 @@ export class Profile {
 
     return this.db.scan(params).promise()
       .then((data) => {
-        if (!data.Items || !data.Items.length) {
+        if (data.Count === 0) {
           return Promise.reject({ statusCode: 404, message: `An item could not be found with id: ${socialId}` });
         }
         return data.Items[0];
