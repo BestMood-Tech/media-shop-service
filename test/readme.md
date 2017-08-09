@@ -68,7 +68,7 @@ events.js:160
 Error: spawn java ENOENT
 ```
 
-- данная ошибка возникает, если работа serverless-offline была завершена не правильно. Решается путем убивания процесса, который отвечает за работа dynamoDB-local.
+- данная ошибка возникает, если работа serverless-offline была завершена не правильно и процеесс работы dynamoDB находится еще в памяти. Решается путем убивания процесса, который отвечает за работа dynamoDB-local.
 ```
 WARN:oejuc.AbstractLifeCycle:FAILED SelectChannelConnector@0.0.0.0:8000:
 java.net.BindException: Адрес уже используется
