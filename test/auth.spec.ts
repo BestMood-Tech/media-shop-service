@@ -131,7 +131,7 @@ describe(`getting all items from db`, () => {
     });
 });
 
-describe(`update profile`, () => {
+xdescribe(`update profile`, () => {
     const profile: any = {
         firstName: 'Semyon',
         lastName: 'Ermolenko',
