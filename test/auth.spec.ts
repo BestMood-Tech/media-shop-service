@@ -127,11 +127,11 @@ describe(`getting all items from db`, () => {
     it('getting all items but db is off', () => {
         delete process.env.IS_OFFLINE;
         return LT(profileFunc.getAllProfiles)
-            .expectError();
+            .expectError((error) => expect(error.toString()).to.equal('Error: [500] Internal Server Error'));
     });
 });
 
-xdescribe(`update profile`, () => {
+describe(`update profile`, () => {
     const profile: any = {
         firstName: 'Semyon',
         lastName: 'Ermolenko',
