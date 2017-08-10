@@ -79,6 +79,17 @@ export class AdminPanel {
     return this.db.scan(params).promise();
   }
 
+  public getOrderById (id) {
+    const params = {
+      TableName: process.env.ORDERS_TABLE as string,
+      KeyConditionExpression: 'id = :id',
+        ExpressionAttributeValues: {
+            ":id": id.toString()
+        }
+    };
+    return this.db.query(params).promise();
+  }
+
   private static getRandom (max) {
     return Math.floor(Math.random() * (max + 1));
   }

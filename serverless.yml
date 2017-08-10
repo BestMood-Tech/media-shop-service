@@ -1,4 +1,4 @@
-service: bmt-media-shop-service
+service: bmt-media-shop-service-fix-print
 provider:
   name: aws
   runtime: nodejs6.10
@@ -226,6 +226,21 @@ functions:
               headers:
                 Access-Control-Allow-Origin: "'*'"
 
+  getOrderById:
+      handler: api/admin/handler.getOrderById
+      events:
+        - http:
+            method: get
+            path: api/admin/getOrderById
+            cors: true
+            integration: lambda
+            authorizer:
+              name: auth
+              resultTtlInSeconds: 0
+            response:
+              headers:
+                Access-Control-Allow-Origin: "'*'"
+
 resources:
   Resources:
     NewResource:
@@ -296,9 +311,13 @@ resources:
             AttributeDefinitions:
               - AttributeName: id
                 AttributeType: S
+              - AttributeName: date
+                AttributeType: S
             KeySchema:
               - AttributeName: id
                 KeyType: HASH
+              - AttributeName: date
+                KeyType: RANGE
             ProvisionedThroughput:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1

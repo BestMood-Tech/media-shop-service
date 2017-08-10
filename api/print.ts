@@ -25,14 +25,25 @@ export async function receipt(event, context, callback) {
     ContentType: 'application/pdf',
     ACL: 'public-read-write',
     Metadata: { "x-amz-meta-requestId": context.awsRequestId }
-  }, (err) => {
-    unlinkSync(tmpFileLocation);
-    if (err) {
-      console.log(err);
-      return callback(err.statusCode ? `[${err.statusCode}] ${err.message}`: '[500] Server error. Please try later');
-    }
-    callback(null, { id: data.id });
-  });
+  }).promise()
+      .then(() => {
+          callback(null, { id: data.id });
+      })
+      .catch((err)=> {
+          unlinkSync(tmpFileLocation);
+          if (err) {
+              console.log(err);
+              return callback(err.statusCode ? `[${err.statusCode}] ${err.message}` : '[500] Server error. Please try later');
+          }})
+
+  // , (err) => {
+  //   unlinkSync(tmpFileLocation);
+  //   if (err) {
+  //     console.log(err);
+  //     return callback(err.statusCode ? `[${err.statusCode}] ${err.message}`: '[500] Server error. Please try later');
+  //   }
+  //   callback(null, { id: data.id });
+  // });
 }
 
 function getTemplate(templateName): Promise<any> {

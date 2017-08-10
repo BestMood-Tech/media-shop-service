@@ -9,7 +9,7 @@ export function createOrder (event, context, callback) {
 
 
   adminPanel.createOrder(data)
-    .then((data) => callback(null,{message: 'Order is successfully created'}))
+    .then((data) => callback(null, data))
     .catch((err) => {
       console.log(err);
       callback(err.statusCode ? `[${err.statusCode}] ${err.message}` : '[500] Internal Server Error');
@@ -46,6 +46,20 @@ export function getOrdersByProfile (event, context, callback) {
     .catch((err) => {
       callback(err.statusCode ? `[${err.statusCode}] ${err.message}` : '[500] Internal Server Error');
     });
+}
+
+export function getOrderById (event, context, callback) {
+    const id = event.query.id;
+
+    console.log('event:', event);
+    console.log('id:', id);
+
+    const adminPanel = new AdminPanel();
+    adminPanel.getOrderById(id)
+        .then((data) => callback(null, data))
+        .catch((err) => {
+            callback(err.statusCode ? `[${err.statusCode}] ${err.message}` : '[500] Internal Server Error');
+        });
 }
 
 
