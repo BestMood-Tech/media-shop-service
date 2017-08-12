@@ -1,0 +1,39 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/node:6.11.2
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run: sudo apt-get install default-jre
+      - run: npm install -q
+      - run: sudo npm install mocha chai ts-node typings serverless -g -q
+      - run: sudo typings install dt~mocha --global --save
+      - run: sudo typings install npm~chai --save
+      - run: sls dynamodb install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: Start serverless-offline
+          command: sls offline start
+          background: true
+      - run: sleep 15
+      - run:
+          name: Run tests!
+          command: npm test

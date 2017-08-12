@@ -1,11 +1,18 @@
-import { DynamoDB } from 'aws-sdk';
+import * as AWS from 'aws-sdk';
 const uuid = require('uuid');
 
 export class Reviews {
   private db;
 
   constructor() {
-    this.db = new DynamoDB.DocumentClient();
+      if (process.env.IS_OFFLINE) {
+          this.db = new AWS.DynamoDB.DocumentClient({
+              region: 'localhost',
+              endpoint: 'http://localhost:8000/'
+          });
+      } else {
+          this.db = new AWS.DynamoDB.DocumentClient();
+      }
   }
 
   public add(data) {

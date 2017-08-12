@@ -6,3 +6,6 @@ jspm_packages
 # Serverless directories
 .serverless
 api/**.js
+.nyc_output/
+.build/
+typings/

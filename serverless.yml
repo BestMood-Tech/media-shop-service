@@ -1,4 +1,5 @@
 service: bmt-media-shop-service
+
 provider:
   name: aws
   runtime: nodejs6.10
@@ -39,9 +40,20 @@ package:
   include:
     - wkhtmltopdf
 
+custom:
+  dynamodb:
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+  s3:
+    port: 8800
+    directory: /tmp
+    cors: true
+
 functions:
   auth:
-    handler: api/auth/handler.auth
+    handler: api/auth/authorization.auth
 
   print:
     handler: api/print.receipt
@@ -54,6 +66,9 @@ functions:
           response:
             headers:
               Access-Control-Allow-Origin: "'*'"
+              Content-Type: "'application/json'"
+            template: $input.json('$')
+
 
   createPromocode:
     handler: api/promocode/handler.create
@@ -69,36 +84,43 @@ functions:
           response:
             headers:
               Access-Control-Allow-Origin: "'*'"
+              Content-Type: "'application/json'"
+            template: $input.json('$')
+
 
   checkPromocode:
-    handler: api/promocode/handler.check
-    events:
-      - http:
-          path: promocode/{id}
-          method: put
-          integration: lambda
-          cors: true
-          authorizer:
-            name: auth
-            resultTtlInSeconds: 0
-          response:
-            headers:
-              Access-Control-Allow-Origin: "'*'"
+      handler: api/promocode/handler.check
+      events:
+        - http:
+            path: promocode/{id}
+            method: put
+            integration: lambda
+            cors: true
+            authorizer:
+              name: auth
+              resultTtlInSeconds: 0
+            response:
+              headers:
+                Access-Control-Allow-Origin: "'*'"
+                Content-Type: "'application/json'"
+              template: $input.json('$')
 
   getPromocode:
-    handler: api/promocode/handler.get
-    events:
-      - http:
-          path: promocode/{id}
-          method: get
-          integration: lambda
-          cors: true
-          authorizer:
-            name: auth
-            resultTtlInSeconds: 0
-          response:
-            headers:
-              Access-Control-Allow-Origin: "'*'"
+      handler: api/promocode/handler.get
+      events:
+        - http:
+            path: promocode/{id}
+            method: get
+            integration: lambda
+            cors: true
+            authorizer:
+              name: auth
+              resultTtlInSeconds: 0
+            response:
+              headers:
+                Access-Control-Allow-Origin: "'*'"
+                Content-Type: "'application/json'"
+              template: $input.json('$')
 
   removePromocode:
     handler: api/promocode/handler.remove
@@ -114,6 +136,8 @@ functions:
           response:
             headers:
               Access-Control-Allow-Origin: "'*'"
+              Content-Type: "'application/json'"
+            template: $input.json('$')
 
   getAllItems:
     handler: api/auth/handler.getAllProfiles
@@ -129,6 +153,8 @@ functions:
           response:
             headers:
               Access-Control-Allow-Origin: "'*'"
+              Content-Type: "'application/json'"
+            template: $input.json('$')
 
   getProfile:
     handler: api/auth/handler.getProfile
@@ -144,6 +170,8 @@ functions:
           response:
             headers:
               Access-Control-Allow-Origin: "'*'"
+              Content-Type: "'application/json'"
+            template: $input.json('$')
 
   updateProfile:
     handler: api/auth/handler.updateProfile
@@ -159,6 +187,8 @@ functions:
           response:
             headers:
               Access-Control-Allow-Origin: "'*'"
+              Content-Type: "'application/json'"
+            template: $input.json('$')
 
   getOrders:
     handler: api/admin/handler.getOrders
@@ -171,6 +201,8 @@ functions:
           response:
             headers:
               Access-Control-Allow-Origin: "'*'"
+              Content-Type: "'application/json'"
+            template: $input.json('$')
 
   addReview:
     handler: api/reviews/handler.add
@@ -183,6 +215,8 @@ functions:
           response:
             headers:
               Access-Control-Allow-Origin: "'*'"
+              Content-Type: "'application/json'"
+            template: $input.json('$')
 
   getReviews:
       handler: api/reviews/handler.getByProductID
@@ -195,6 +229,8 @@ functions:
             response:
               headers:
                 Access-Control-Allow-Origin: "'*'"
+                Content-Type: "'application/json'"
+              template: $input.json('$')
 
   createOrder:
     handler: api/admin/handler.createOrder
@@ -210,6 +246,8 @@ functions:
           response:
             headers:
               Access-Control-Allow-Origin: "'*'"
+              Content-Type: "'application/json'"
+            template: $input.json('$')
 
   getOrdersByProfile:
       handler: api/admin/handler.getOrdersByProfile
@@ -225,6 +263,8 @@ functions:
             response:
               headers:
                 Access-Control-Allow-Origin: "'*'"
+                Content-Type: "'application/json'"
+              template: $input.json('$')
 
   getOrderById:
       handler: api/admin/handler.getOrderById
@@ -270,7 +310,7 @@ resources:
           StreamViewType: NEW_AND_OLD_IMAGES
         TableName: ${self:provider.environment.PROMOCODE_TABLE}
 
-    ItemsTable:
+    UsersTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ${self:provider.environment.USERS_TABLE}
@@ -326,3 +366,6 @@ resources:
             TableName: ${self:provider.environment.ORDERS_TABLE}
 plugins:
   - serverless-plugin-typescript
+  - serverless-dynamodb-local
+  - serverless-s3-local
+  - serverless-offline

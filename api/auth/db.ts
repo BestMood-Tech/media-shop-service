@@ -2,7 +2,10 @@ import * as AWS from 'aws-sdk';
 
 const uuid = require('uuid');
 
-const db = new AWS.DynamoDB.DocumentClient();
+const db = new AWS.DynamoDB.DocumentClient({
+    region: 'localhost',
+    endpoint: 'http://localhost:3000'
+});
 
 const getItems = () =>
   new Promise((resolve, reject) => {

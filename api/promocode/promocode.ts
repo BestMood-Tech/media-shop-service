@@ -1,11 +1,18 @@
-import { DynamoDB } from 'aws-sdk';
+import * as AWS from 'aws-sdk';
 
 export class Promocode {
 
   private db;
 
   constructor() {
-    this.db = new DynamoDB.DocumentClient();
+      if (process.env.IS_OFFLINE) {
+          this.db = new AWS.DynamoDB.DocumentClient({
+              region: 'localhost',
+              endpoint: 'http://localhost:8000/'
+          });
+      } else {
+          this.db = new AWS.DynamoDB.DocumentClient();
+      }
   }
 
   public create(id: string, persent: number): Promise<any> {
@@ -20,7 +27,8 @@ export class Promocode {
       }
     };
 
-    return this.db.put(params).promise();
+    return this.db.put(params).promise()
+      .then((data, err, oneMoreData) => console.log('asdasdasdasd ---------', data, err, oneMoreData));
   }
 
   public check(id: string, promocode: string): Promise<number> {
