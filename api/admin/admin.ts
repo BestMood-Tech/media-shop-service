@@ -52,9 +52,7 @@ export class AdminPanel {
         });
         return formedOrders;
       })
-       .then((data) => Promise.resolve(data));
-
-
+       .then((data) => data);
   }
 
   public createOrder (orderData) {
@@ -82,13 +80,12 @@ export class AdminPanel {
   public getOrderById (id) {
     const params = {
       TableName: process.env.ORDERS_TABLE as string,
-      KeyConditionExpression: 'id = :id',
-      ExpressionAttributeValues: {
-          ":id": id.toString()
-      }
+      Key: {
+        id
+      },
     };
-    return this.db.query(params).promise()
-        .then((data) => Promise.resolve(data.Items[0]));
+    return this.db.get(params).promise()
+        .then((data) => data.Item);
   }
 
   private static getRandom (max) {
