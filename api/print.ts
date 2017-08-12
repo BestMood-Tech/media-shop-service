@@ -27,6 +27,7 @@ export async function receipt(event, context, callback) {
     Metadata: { "x-amz-meta-requestId": context.awsRequestId }
   }).promise()
       .then(() => {
+          unlinkSync(tmpFileLocation);
           callback(null, { id: data.id });
       })
       .catch((err)=> {

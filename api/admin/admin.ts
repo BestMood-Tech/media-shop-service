@@ -83,11 +83,12 @@ export class AdminPanel {
     const params = {
       TableName: process.env.ORDERS_TABLE as string,
       KeyConditionExpression: 'id = :id',
-        ExpressionAttributeValues: {
-            ":id": id.toString()
-        }
+      ExpressionAttributeValues: {
+          ":id": id.toString()
+      }
     };
-    return this.db.query(params).promise();
+    return this.db.query(params).promise()
+        .then((data) => Promise.resolve(data.Items[0]));
   }
 
   private static getRandom (max) {

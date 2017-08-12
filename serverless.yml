@@ -231,7 +231,7 @@ functions:
       events:
         - http:
             method: get
-            path: api/admin/getOrderById
+            path: api/admin/getOrderById/{id}
             cors: true
             integration: lambda
             authorizer:
