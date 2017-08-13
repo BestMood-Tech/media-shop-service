@@ -51,8 +51,7 @@ export class AdminPanel {
           formedOrders.push(order);
         });
         return formedOrders;
-      })
-       .then((data) => data);
+      });
   }
 
   public createOrder (orderData) {
