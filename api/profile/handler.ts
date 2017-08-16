@@ -10,9 +10,10 @@ export function getAll(event, context, callback) {
 
 export function findOrCreate(event, context, callback) {
   const [social, id] = event.principalId.split('|');
+  console.log('------->', id, social)
   const user = event.body;
 
-  log('FindOrCreate Profile. Incoming data: ', '\nsocial: ', social, ' id: ', id, '\nbody: ', user);
+  log('FindOrCreate Profile. Incoming data: ', '\n social: ', social, ' id: ', id, '\n body: ', user);
 
   const manager = new ProfileManager();
 
@@ -28,7 +29,7 @@ export function update(event, context, callback) {
   const id = event.path.id;
   const body = event.body;
 
-  log('Update Profile. Incoming data: ', ' \nid: ', id, '\nbody: ', body);
+  log('Update Profile. Incoming data: ', ' \n id: ', id, '\n body: ', body);
 
   const manager = new ProfileManager();
 
