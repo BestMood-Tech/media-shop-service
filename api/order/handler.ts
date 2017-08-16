@@ -15,14 +15,20 @@ export function createOrder(event, context, callback) {
 export function getByRangeDates(event, context, callback) {
   const from = event.query.from ? `${event.query.from}-01-01` : '2014-01-01';
   const to = event.query.to ? `${event.query.to}-11-31` : '2017-12-31';
-  const fakeNumber = OrderManager.randomNumber(100);
+  const isFake = event.query.isFake;
 
-  log('GetByRangeDates. Incoming data: \n', 'from: ', from, '\n to: ', to);
+  log('GetByRangeDates. Incoming data: \n', 'from: ', from, '\n to: ', to, '\n isFake: ', isFake);
 
   const manager = new OrderManager();
+  let promises = [manager.getByRangeDates(from, to)];
 
-  Promise.all([manager.getByRangeDates(from, to), OrderManager.makeFakeOrders(fakeNumber)])
-    .then(([dbOrders, fakeOrders]) => callback(null, dbOrders.concat(fakeOrders)))
+  if (isFake) {
+    const fakeNumber = OrderManager.randomNumber(100);
+    promises.push(OrderManager.makeFakeOrders(fakeNumber))
+  }
+
+  Promise.all(promises)
+    .then((result) => callback(null, result[0].concat(result[1] || [])))
     .catch(errorHandler(callback));
 }
 

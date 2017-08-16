@@ -28,7 +28,7 @@ export function removeFilePromise(tmpFileLocation): Promise<any> {
 
 export function log(...args) {
   if(process.env.IS_OFFLINE) { return; }
-  console.log(args);
+  console.log.apply(console, args);
 }
 
 export class Dynamo {

@@ -160,10 +160,10 @@ functions:
               Content-Type: "'application/json'"
             template: $input.json('$')
 
-# ================== Profiles =====================
+# ================== Profile =====================
 
   getAllItems:
-    handler: api/auth/handler.getAll
+    handler: api/profile/handler.getAll
     events:
       - http:
           path: api/profiles
@@ -180,7 +180,7 @@ functions:
             template: $input.json('$')
 
   getProfile:
-    handler: api/auth/handler.findOrCreate
+    handler: api/profile/handler.findOrCreate
     events:
       - http:
           path: api/profile
@@ -197,7 +197,7 @@ functions:
             template: $input.json('$')
 
   updateProfile:
-    handler: api/auth/handler.update
+    handler: api/profile/handler.update
     events:
       - http:
           method: put
