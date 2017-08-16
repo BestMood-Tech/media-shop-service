@@ -19,14 +19,17 @@ export class ProfileManager extends Dynamo {
         ':social': social,
       },
     });
-    console.log('------> ', params)
+
     return this.db.scan(params).promise()
       .then(data => data.Items.map(item => new Profile(item)))
       .then((profiles: Profile[]) => {
         if (!profiles.length) {
           return Promise.reject({ statusCode: 404, message: `An item could not be found with id: ${socialId}` });
         }
-        return profiles.pop();
+        return {
+          statusCode: 200,
+          body: profiles.pop(),
+        }
       });
   }
 
@@ -60,7 +63,10 @@ export class ProfileManager extends Dynamo {
       Item: profile,
     });
 
-    return this.db.put(params).promise().then(() => profile);
+    return this.db.put(params).promise().then(() => ({
+      statusCode: 201,
+      body: profile,
+    }));
   }
 
   public update(id: string, field: string, value: any): Promise<any> {

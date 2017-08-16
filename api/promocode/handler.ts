@@ -85,7 +85,7 @@ export function remove(event, context, callback){
 
   const promocode: PromocodeManager = new PromocodeManager();
   promocode.remove(userId)
-    .then(() => callback(null, { message: 'PromocodeManager is deleted' }))
+    .then(() => callback(null, { message: 'Promocode is deleted' }))
     .catch(errorHandler(callback, '[500] Server error. Please try later (can not remove a promocode)'))
 }
 
