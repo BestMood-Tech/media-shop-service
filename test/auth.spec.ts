@@ -1,4 +1,4 @@
-import * as profileFunc from '../api/auth/handler';
+import * as profileFunc from '../api/profile/handler';
 import { expect } from 'chai';
 import * as LT from 'lambda-tester';
 import { HelperForTests } from './helper';
@@ -37,7 +37,7 @@ describe('checking add and get profile in db', () => {
             currency: '',
             picture: 'https://avatars2.githubusercontent.com/u/26054782?v=4'
         };
-        return LT(profileFunc.getProfile)
+        return LT(profileFunc.findOrCreate)
             .event({
                 principalId: 'vkontakte|95851704',
                 body: tmp
@@ -46,7 +46,7 @@ describe('checking add and get profile in db', () => {
     });
 
     it('when create profile', () => {
-        return LT(profileFunc.getProfile)
+        return LT(profileFunc.findOrCreate)
             .event({
                 principalId: 'vkontakte|95851704',
                 body: demoProfile
@@ -61,7 +61,7 @@ describe('checking add and get profile in db', () => {
     });
 
     it('when create profile but this profile is exist in db', () => {
-        return LT(profileFunc.getProfile)
+        return LT(profileFunc.findOrCreate)
             .event({
                 principalId: 'vkontakte|95851704',
                 body: demoProfile
@@ -72,7 +72,7 @@ describe('checking add and get profile in db', () => {
     });
 
     it('when get profile and this profile exist in db', () => {
-        return LT(profileFunc.getProfile)
+        return LT(profileFunc.findOrCreate)
             .event({
                 principalId: 'vkontakte|95851704',
                 body: demoProfile
@@ -87,7 +87,7 @@ describe('checking add and get profile in db', () => {
     });
 
     it('when get profile and principalId field is bad', () => {
-        return LT(profileFunc.getProfile)
+        return LT(profileFunc.findOrCreate)
             .event({
                 principalId: 'vkontakte',
                 body: demoProfile
@@ -97,7 +97,7 @@ describe('checking add and get profile in db', () => {
 
     it('when get profile and db is off', () => {
         delete process.env.IS_OFFLINE;
-        return LT(profileFunc.getProfile)
+        return LT(profileFunc.findOrCreate)
             .event({
                 principalId: 'vkontakte',
                 body: demoProfile
@@ -118,7 +118,7 @@ describe(`getting all items from db`, () => {
     });
 
     it('getting all items', () => {
-        return LT(profileFunc.getAllProfiles)
+        return LT(profileFunc.getAll)
             .expectResult((res) => {
                 expect(res).to.exist;
             });
@@ -126,7 +126,7 @@ describe(`getting all items from db`, () => {
 
     it('getting all items but db is off', () => {
         delete process.env.IS_OFFLINE;
-        return LT(profileFunc.getAllProfiles)
+        return LT(profileFunc.getAll)
             .expectError();
     });
 });
@@ -153,7 +153,7 @@ describe(`update profile`, () => {
     });
 
     it('create profile before update', () => {
-        return LT(profileFunc.getProfile)
+        return LT(profileFunc.findOrCreate)
             .event({
                 principalId: 'vkontakte|95851704',
                 body: profile
@@ -169,7 +169,7 @@ describe(`update profile`, () => {
 
     it(`when update profile`, () => {
         profile.firstName = 'Egor';
-        return LT(profileFunc.updateProfile)
+        return LT(profileFunc.update)
             .event({
                 principalId: 'vkontakte|95851704',
                 body: {
@@ -181,7 +181,7 @@ describe(`update profile`, () => {
                 }
             })
             .expectResult(() => {
-                return LT(profileFunc.getProfile)
+                return LT(profileFunc.findOrCreate)
                     .event({principalId: 'vkontakte|95851704'})
                     .expectResult((result) => {
                         expect(result).to.exist;
@@ -193,7 +193,7 @@ describe(`update profile`, () => {
     });
 
     it(`when update profile and path.id is bad`, () => {
-        return LT(profileFunc.updateProfile)
+        return LT(profileFunc.update)
             .event({
                 principalId: 'vkontakte|95851704',
                 body: {
@@ -208,7 +208,7 @@ describe(`update profile`, () => {
     });
 
     it(`when update profile and value field is empty`, () => {
-        return LT(profileFunc.updateProfile)
+        return LT(profileFunc.update)
             .event({
                 principalId: 'vkontakte|95851704',
                 body: {
@@ -224,7 +224,7 @@ describe(`update profile`, () => {
 
     it('when update profile and db is off', () => {
         delete process.env.IS_OFFLINE;
-        return LT(profileFunc.updateProfile)
+        return LT(profileFunc.update)
             .event({
                 principalId: 'vkontakte',
                 body: {

@@ -1,8 +1,8 @@
-import * as promocodeFunc from '../api/promocode/handler';
 import { expect } from 'chai';
 import * as LT from 'lambda-tester';
-import { HelperForTests } from './helper';
+import * as promocodeFunc from '../api/promocode/handler';
 import { CheckBody, CreateBody } from '../api/promocode/promocode.manager';
+import { HelperForTests } from './helper';
 
 const HFT = new HelperForTests();
 describe('checking create promocode', () => {

@@ -28,8 +28,8 @@ export function removeFilePromise(tmpFileLocation): Promise<any> {
 
 export class Dynamo {
   protected db;
-  constructor() {
-    if (process.env.IS_OFFLINE) {
+  constructor(IS_OFFLINE?) {
+    if (process.env.IS_OFFLINE || IS_OFFLINE) {
       this.db = new DynamoDB.DocumentClient({
         region: 'localhost',
         endpoint: 'http://localhost:8000/',
