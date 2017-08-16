@@ -14,7 +14,6 @@ export function createOrder(event, context, callback) {
     .then(profile => {
       data.createdAt = (new Date()).toISOString();
       data.createdBy = profile.id;
-      console.log('----->', data, profile)
       return manager.create(data);
     })
     .then((result) => callback(null, result))

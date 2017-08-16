@@ -19,7 +19,6 @@ export class OrderManager extends Dynamo {
     const params = OrderManager.getParams({
       Item: order,
     });
-    console.log('order', order)
     return this.db.put(params).promise().then(() => order);
   }
 
