@@ -31,7 +31,7 @@ provider:
   environment:
     BUCKET: ${self:service}-templates
     PDF_BUCKET: ${self:service}-pdf
-    REVIEWS_TABLE: ${self:service}-table-reviews
+    REVIEWS_TABLE: ${self:service}-table-review
     PROMOCODE_TABLE: ${self:service}-promocode
     USERS_TABLE: ${self:service}-users
     ORDERS_TABLE: ${self:service}-orders
@@ -53,28 +53,34 @@ custom:
 
 functions:
   auth:
-    handler: api/auth/authorization.auth
+    handler: api/auth/handler.auth
 
-  print:
-    handler: api/print.receipt
+# ================== Invoices =====================
+
+  printInvoice:
+    handler: api/invoice/handler.print
     events:
       - http:
-          path: receipt
-          method: post
+          path: invoice/print/{id}
+          method: get
           integration: lambda
           cors: true
+          authorizer:
+            name: auth
+            resultTtlInSeconds: 0
           response:
             headers:
               Access-Control-Allow-Origin: "'*'"
               Content-Type: "'application/json'"
             template: $input.json('$')
 
+# ================== Promocodes =====================
 
   createPromocode:
     handler: api/promocode/handler.create
     events:
       - http:
-          path: promocode/{id}
+          path: promocode/{userId}
           method: post
           integration: lambda
           cors: true
@@ -92,7 +98,7 @@ functions:
       handler: api/promocode/handler.check
       events:
         - http:
-            path: promocode/{id}
+            path: promocode/{userId}
             method: put
             integration: lambda
             cors: true
@@ -109,7 +115,7 @@ functions:
       handler: api/promocode/handler.get
       events:
         - http:
-            path: promocode/{id}
+            path: promocode/{userId}
             method: get
             integration: lambda
             cors: true
@@ -126,7 +132,7 @@ functions:
     handler: api/promocode/handler.remove
     events:
       - http:
-          path: promocode/{id}
+          path: promocode/{userId}
           method: delete
           integration: lambda
           cors: true
@@ -139,8 +145,10 @@ functions:
               Content-Type: "'application/json'"
             template: $input.json('$')
 
+# ================== Profiles =====================
+
   getAllItems:
-    handler: api/auth/handler.getAllProfiles
+    handler: api/auth/handler.getAll
     events:
       - http:
           path: api/profiles
@@ -157,7 +165,7 @@ functions:
             template: $input.json('$')
 
   getProfile:
-    handler: api/auth/handler.getProfile
+    handler: api/auth/handler.findOrCreate
     events:
       - http:
           path: api/profile
@@ -174,7 +182,7 @@ functions:
             template: $input.json('$')
 
   updateProfile:
-    handler: api/auth/handler.updateProfile
+    handler: api/auth/handler.update
     events:
       - http:
           method: put
@@ -190,25 +198,13 @@ functions:
               Content-Type: "'application/json'"
             template: $input.json('$')
 
-  getOrders:
-    handler: api/admin/handler.getOrders
-    events:
-      - http:
-          path: api/admin/getOrders
-          method: get
-          integration: lambda
-          cors: true
-          response:
-            headers:
-              Access-Control-Allow-Origin: "'*'"
-              Content-Type: "'application/json'"
-            template: $input.json('$')
+# ================== Review =====================
 
   addReview:
-    handler: api/reviews/handler.add
+    handler: api/review/handler.add
     events:
       - http:
-          path: reviews/add
+          path: review/add
           method: post
           integration: lambda
           cors: true
@@ -219,10 +215,10 @@ functions:
             template: $input.json('$')
 
   getReviews:
-      handler: api/reviews/handler.getByProductID
+      handler: api/review/handler.getByProductID
       events:
         - http:
-            path: reviews/{productID}
+            path: review/{productID}
             method: get
             integration: lambda
             cors: true
@@ -232,12 +228,14 @@ functions:
                 Content-Type: "'application/json'"
               template: $input.json('$')
 
+# ================== Orders =====================
+
   createOrder:
-    handler: api/admin/handler.createOrder
+    handler: api/order/handler.createOrder
     events:
       - http:
           method: post
-          path: api/admin/createOrder
+          path: api/order
           cors: true
           integration: lambda
           authorizer:
@@ -249,12 +247,12 @@ functions:
               Content-Type: "'application/json'"
             template: $input.json('$')
 
-  getOrdersByProfile:
-      handler: api/admin/handler.getOrdersByProfile
+  getByProfileId:
+      handler: api/order/handler.getByProfileId
       events:
         - http:
             method: get
-            path: api/admin/getOrdersByProfile
+            path: api/order/getByProfileId/{id}
             cors: true
             integration: lambda
             authorizer:
@@ -266,12 +264,12 @@ functions:
                 Content-Type: "'application/json'"
               template: $input.json('$')
 
-  getOrderById:
-      handler: api/admin/handler.getOrderById
+  getById:
+      handler: api/order/handler.getById
       events:
         - http:
             method: get
-            path: api/admin/getOrderById/{id}
+            path: api/order/getById/{id}
             cors: true
             integration: lambda
             authorizer:
@@ -280,6 +278,22 @@ functions:
             response:
               headers:
                 Access-Control-Allow-Origin: "'*'"
+                Content-Type: "'application/json'"
+              template: $input.json('$')
+
+  getByRangeDates:
+    handler: api/order/handler.getByRangeDates
+    events:
+      - http:
+          path: api/order/getByRangeDates
+          method: get
+          integration: lambda
+          cors: true
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+              Content-Type: "'application/json'"
+            template: $input.json('$')
 
 resources:
   Resources:

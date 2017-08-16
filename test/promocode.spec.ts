@@ -2,7 +2,7 @@ import * as promocodeFunc from '../api/promocode/handler';
 import { expect } from 'chai';
 import * as LT from 'lambda-tester';
 import { HelperForTests } from './helper';
-import { CheckBody, CreateBody } from '../api/promocode/promocode';
+import { CheckBody, CreateBody } from '../api/promocode/promocode.manager';
 
 const HFT = new HelperForTests();
 describe('checking create promocode', () => {
@@ -35,7 +35,7 @@ describe('checking create promocode', () => {
         body: demoNewUser
       })
       .expectResult((result) => {
-        expect(result.persent).to.equal(10);
+        expect(result.percent).to.equal(10);
       });
   });
 
@@ -67,7 +67,7 @@ describe('checking create promocode', () => {
         body: demoOldUser
       })
       .expectResult((result) => {
-        expect(result.persent).to.equal(20);
+        expect(result.percent).to.equal(20);
       });
   });
 
@@ -79,7 +79,7 @@ describe('checking create promocode', () => {
         body: demoOldUser
       })
       .expectResult((result) => {
-        expect(result.persent).to.equal(30);
+        expect(result.percent).to.equal(30);
       });
   });
 
@@ -91,7 +91,7 @@ describe('checking create promocode', () => {
         body: demoOldUser
       })
       .expectResult((result) => {
-        expect(result.persent).to.equal(40);
+        expect(result.percent).to.equal(40);
       });
   });
 
@@ -103,7 +103,7 @@ describe('checking create promocode', () => {
         body: demoOldUser
       })
       .expectResult((result) => {
-        expect(result.persent).to.equal(50);
+        expect(result.percent).to.equal(50);
       });
   });
 
@@ -115,7 +115,7 @@ describe('checking create promocode', () => {
         body: demoOldUser
       })
       .expectResult((result) => {
-        expect(result.persent).to.equal(50);
+        expect(result.percent).to.equal(50);
       });
   });
 
@@ -161,7 +161,7 @@ describe('checking get promocode', () => {
         body: demoNewUser
       })
       .expectResult((result) => {
-        expect(result.persent).to.equal(10);
+        expect(result.percent).to.equal(10);
       });
   });
 
@@ -171,7 +171,7 @@ describe('checking get promocode', () => {
         path: { id: '1' }
       })
       .expectResult((result) => {
-        expect(result.persent).to.equal(10);
+        expect(result.percent).to.equal(10);
         expect(result.promocode).to.not.equal('');
       });
   });
@@ -183,7 +183,7 @@ describe('checking get promocode', () => {
         body: demoOldUser
       })
       .expectResult((result) => {
-        expect(result.persent).to.equal(20);
+        expect(result.percent).to.equal(20);
       });
   });
 
@@ -193,7 +193,7 @@ describe('checking get promocode', () => {
         path: { id: '1' }
       })
       .expectResult((result) => {
-        expect(result.persent).to.equal(20);
+        expect(result.percent).to.equal(20);
         expect(result.promocode).to.not.equal('');
       });
   });
@@ -204,7 +204,7 @@ describe('checking get promocode', () => {
         path: { id: '2' }
       })
       .expectResult((result) => {
-        expect(result.persent).to.equal(0);
+        expect(result.percent).to.equal(0);
         expect(result.promocode).to.equal('');
       });
   });
@@ -255,7 +255,7 @@ describe('checking remove promocode', () => {
         body: demoNewUser
       })
       .expectResult((result) => {
-        expect(result.persent).to.equal(10);
+        expect(result.percent).to.equal(10);
       });
   });
 
@@ -265,7 +265,7 @@ describe('checking remove promocode', () => {
         path: { id: '1' }
       })
       .expectResult((result) => {
-        expect(result.message).to.equal('Promocode is deleted');
+        expect(result.message).to.equal('PromocodeManager is deleted');
       });
   });
 
@@ -275,7 +275,7 @@ describe('checking remove promocode', () => {
         path: { id: '2' }
       })
       .expectResult((result) => {
-        expect(result.message).to.equal('Promocode is deleted');
+        expect(result.message).to.equal('PromocodeManager is deleted');
       });
   });
 
@@ -328,7 +328,7 @@ describe('checking check promocode', () => {
         body: demoNewUser
       })
       .expectResult((result) => {
-        expect(result.persent).to.equal(10);
+        expect(result.percent).to.equal(10);
       });
   });
 
@@ -338,7 +338,7 @@ describe('checking check promocode', () => {
         path: { id: '1' }
       })
       .expectResult((result) => {
-        expect(result.persent).to.equal(10);
+        expect(result.percent).to.equal(10);
         expect(result.promocode).to.not.equal('');
         demoCheck.promocode = result.promocode;
       });
@@ -351,7 +351,7 @@ describe('checking check promocode', () => {
         body: demoCheck
       })
       .expectResult((result) => {
-        expect(result.persent).to.equal(10);
+        expect(result.percent).to.equal(10);
       });
   });
 
