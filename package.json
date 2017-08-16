@@ -1,6 +1,6 @@
 {
-  "name": "pdf-generator",
-  "version": "0.0.1",
+  "name": "media-shop-serverless-service",
+  "version": "0.0.2",
   "description": "",
   "main": "handler.js",
   "scripts": {
