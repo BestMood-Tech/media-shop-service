@@ -46,6 +46,6 @@ export class HelperForTests extends Dynamo {
   }
 
   public getEnvVar(tableName) {
-    return this.yaml.provider.environment[tableName];
+    return this.yaml.provider.environment[tableName].replace('${self:service}', this.yaml.service);
   }
 }
