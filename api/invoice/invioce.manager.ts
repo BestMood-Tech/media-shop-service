@@ -1,4 +1,4 @@
-import { DynamoDB, S3 } from 'aws-sdk';
+import { S3 } from 'aws-sdk';
 import { createWriteStream } from 'fs';
 import { render } from 'mustache';
 import * as wkhtmltopdf from 'wkhtmltopdf';
@@ -56,7 +56,7 @@ export class InvoiceManager extends Dynamo {
         'image-quality': 100,
         // 'user-style-sheet': styleSheet,
       }, (err) => {
-        console.log(err);
+        console.log('Generated', err);
         err ? notOk(err) : ok();
       })
         .pipe(createWriteStream(InvoiceManager.getFileLocation(orderId)));
@@ -64,6 +64,6 @@ export class InvoiceManager extends Dynamo {
   }
 
   static getFileLocation(id): string {
-    return `/tmp/rendered${id}.pdf`;
+    return `/tmp/rendered-${id}.pdf`;
   }
 }

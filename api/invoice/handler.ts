@@ -15,10 +15,10 @@ export async function print(event, context, callback) {
 
   try {
     await manager.printOrder(order, context.awsRequestId);
-    await removeFilePromise(InvoiceManager.getFileLocation(order.id));
+    await removeFilePromise(InvoiceManager.getFileLocation(orderId));
     callback(null, { id: order.id });
   } catch (err) {
-    await removeFilePromise(InvoiceManager.getFileLocation(order.id));
+    await removeFilePromise(InvoiceManager.getFileLocation(orderId));
     errorHandler(callback)(err);
   }
 }

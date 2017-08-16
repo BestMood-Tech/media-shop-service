@@ -1,4 +1,4 @@
-import { readFile, unlink } from 'fs';
+import { existsSync, readFile, unlink, } from 'fs';
 import { DynamoDB } from 'aws-sdk';
 
 export function errorHandler(callback, customMessage?) {
@@ -19,6 +19,9 @@ export function readFilePromise(filename): Promise<Buffer> {
 
 export function removeFilePromise(tmpFileLocation): Promise<any> {
   return new Promise(function (resolve, reject) {
+    if (!existsSync(tmpFileLocation)) {
+      return resolve();
+    }
     unlink(tmpFileLocation, (err) => {
       if (err) reject(err);
       resolve();
