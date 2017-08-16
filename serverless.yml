@@ -204,7 +204,7 @@ functions:
     handler: api/review/handler.add
     events:
       - http:
-          path: review/add
+          path: review
           method: post
           integration: lambda
           cors: true
