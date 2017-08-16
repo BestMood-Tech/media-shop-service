@@ -60,8 +60,8 @@ export function check(event, context, callback) {
   const promocode: PromocodeManager = new PromocodeManager();
 
   promocode.check(userId, data.promocode)
-    .then((data) => callback(null, { persent: data }))
-    .catch(errorHandler(callback, '[500] Server error. Please try later (can not remove a promocode)'));
+    .then((data) => callback(null, { percent: data }))
+    .catch(errorHandler(callback, '[500] Server error. Please try later (can not check a promocode)'));
 }
 
 export function get(event, context, callback) {

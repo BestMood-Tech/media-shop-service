@@ -67,7 +67,11 @@ describe('checking add and get profile in db', () => {
                 body: demoProfile
             })
             .expectResult((result) => {
-                expect(result.body).to.equal(undefined);
+              delete result.id;
+              expect(result).to.exist;
+              for (const key of Object.keys(result)) {
+                expect(result.body[key]).to.equal(demoProfile[key]);
+              }
             });
     });
 
@@ -81,7 +85,7 @@ describe('checking add and get profile in db', () => {
                 delete result.id;
                 expect(result).to.exist;
                 for (const key of Object.keys(result)) {
-                    expect(result[key]).to.equal(demoProfile[key]);
+                    expect(result.body[key]).to.equal(demoProfile[key]);
                 }
             });
     });
@@ -186,7 +190,7 @@ describe(`update profile`, () => {
                     .expectResult((result) => {
                         expect(result).to.exist;
                         for (const key of Object.keys(result)) {
-                            expect(result[key]).to.equal(profile[key]);
+                            expect(result.body[key]).to.equal(profile[key]);
                         }
                     });
             });

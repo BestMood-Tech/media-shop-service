@@ -31,7 +31,7 @@ describe('checking create promocode', () => {
   it('when create promocode for new user', () => {
     return LT(promocodeFunc.create)
       .event({
-        path: { id: '1' },
+        path: { userId: '1' },
         body: demoNewUser
       })
       .expectResult((result) => {
@@ -42,7 +42,7 @@ describe('checking create promocode', () => {
   it('when create promocode for old user without orders', () => {
     return LT(promocodeFunc.create)
       .event({
-        path: { id: '1' },
+        path: { userId: '1' },
         body: demoOldUser
       })
       .expectError((error) => {
@@ -53,7 +53,7 @@ describe('checking create promocode', () => {
   it('when create promocode for new user with invalid id', () => {
     return LT(promocodeFunc.create)
       .event({
-        path: { id: 1 },
+        path: { userId: 1 },
         body: demoNewUser
       })
       .expectError();
@@ -63,7 +63,7 @@ describe('checking create promocode', () => {
     demoOldUser.orderCount = 5;
     return LT(promocodeFunc.create)
       .event({
-        path: { id: '1' },
+        path: { userId: '1' },
         body: demoOldUser
       })
       .expectResult((result) => {
@@ -75,7 +75,7 @@ describe('checking create promocode', () => {
     demoOldUser.orderCount = 10;
     return LT(promocodeFunc.create)
       .event({
-        path: { id: '1' },
+        path: { userId: '1' },
         body: demoOldUser
       })
       .expectResult((result) => {
@@ -87,7 +87,7 @@ describe('checking create promocode', () => {
     demoOldUser.orderCount = 15;
     return LT(promocodeFunc.create)
       .event({
-        path: { id: '1' },
+        path: { userId: '1' },
         body: demoOldUser
       })
       .expectResult((result) => {
@@ -99,7 +99,7 @@ describe('checking create promocode', () => {
     demoOldUser.orderCount = 20;
     return LT(promocodeFunc.create)
       .event({
-        path: { id: '1' },
+        path: { userId: '1' },
         body: demoOldUser
       })
       .expectResult((result) => {
@@ -111,7 +111,7 @@ describe('checking create promocode', () => {
     demoOldUser.orderCount = 25;
     return LT(promocodeFunc.create)
       .event({
-        path: { id: '1' },
+        path: { userId: '1' },
         body: demoOldUser
       })
       .expectResult((result) => {
@@ -123,7 +123,7 @@ describe('checking create promocode', () => {
     delete process.env.IS_OFFLINE;
     return LT(promocodeFunc.create)
       .event({
-        path: { id: '1' },
+        path: { userId: '1' },
         body: demoNewUser
       })
       .expectError((error) => {
@@ -157,7 +157,7 @@ describe('checking get promocode', () => {
   it('create promocode for new user before get', () => {
     return LT(promocodeFunc.create)
       .event({
-        path: { id: '1' },
+        path: { userId: '1' },
         body: demoNewUser
       })
       .expectResult((result) => {
@@ -168,7 +168,7 @@ describe('checking get promocode', () => {
   it('when get promocode for new user', () => {
     return LT(promocodeFunc.get)
       .event({
-        path: { id: '1' }
+        path: { userId: '1' }
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(10);
@@ -179,7 +179,7 @@ describe('checking get promocode', () => {
   it('create promocode for old user before get', () => {
     return LT(promocodeFunc.create)
       .event({
-        path: { id: '1' },
+        path: { userId: '1' },
         body: demoOldUser
       })
       .expectResult((result) => {
@@ -190,7 +190,7 @@ describe('checking get promocode', () => {
   it('when get promocode for old user', () => {
     return LT(promocodeFunc.get)
       .event({
-        path: { id: '1' }
+        path: { userId: '1' }
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(20);
@@ -201,7 +201,7 @@ describe('checking get promocode', () => {
   it('when get promocode for user than dont exist', () => {
     return LT(promocodeFunc.get)
       .event({
-        path: { id: '2' }
+        path: { userId: '2' }
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(0);
@@ -212,7 +212,7 @@ describe('checking get promocode', () => {
   it('when get promocode for new user with invalid id', () => {
     return LT(promocodeFunc.get)
       .event({
-        path: { id: 1 },
+        path: { userId: 1 },
         body: demoNewUser
       })
       .expectError();
@@ -222,7 +222,7 @@ describe('checking get promocode', () => {
     delete process.env.IS_OFFLINE;
     return LT(promocodeFunc.get)
       .event({
-        path: { id: 1 },
+        path: { userId: 1 },
         body: demoNewUser
       })
       .expectError((error) => {
@@ -251,7 +251,7 @@ describe('checking remove promocode', () => {
   it('create promocode for new user before get', () => {
     return LT(promocodeFunc.create)
       .event({
-        path: { id: '1' },
+        path: { userId: '1' },
         body: demoNewUser
       })
       .expectResult((result) => {
@@ -262,27 +262,27 @@ describe('checking remove promocode', () => {
   it('when delete promocode for new user', () => {
     return LT(promocodeFunc.remove)
       .event({
-        path: { id: '1' }
+        path: { userId: '1' }
       })
       .expectResult((result) => {
-        expect(result.message).to.equal('PromocodeManager is deleted');
+        expect(result.message).to.equal('Promocode is deleted');
       });
   });
 
   it('when delete promocode for user than dont exist', () => {
     return LT(promocodeFunc.remove)
       .event({
-        path: { id: '2' }
+        path: { userId: '2' }
       })
       .expectResult((result) => {
-        expect(result.message).to.equal('PromocodeManager is deleted');
+        expect(result.message).to.equal('Promocode is deleted');
       });
   });
 
   it('when delete promocode for new user with invalid id', () => {
     return LT(promocodeFunc.remove)
       .event({
-        path: { id: 1 },
+        path: { userId: 1 },
         body: demoNewUser
       })
       .expectError();
@@ -292,7 +292,7 @@ describe('checking remove promocode', () => {
     delete process.env.IS_OFFLINE;
     return LT(promocodeFunc.remove)
       .event({
-        path: { id: '2' }
+        path: { userId: '2' }
       })
       .expectError((error) => {
         expect(error.message).to.equal('[500] Server error. Please try later (can not remove a promocode)');
@@ -324,7 +324,7 @@ describe('checking check promocode', () => {
   it('create promocode for new user before check', () => {
     return LT(promocodeFunc.create)
       .event({
-        path: { id: '1' },
+        path: { userId: '1' },
         body: demoNewUser
       })
       .expectResult((result) => {
@@ -335,7 +335,7 @@ describe('checking check promocode', () => {
   it('get promocode for new user before check', () => {
     return LT(promocodeFunc.get)
       .event({
-        path: { id: '1' }
+        path: { userId: '1' }
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(10);
@@ -347,7 +347,7 @@ describe('checking check promocode', () => {
   it('when check promocode for user', () => {
     return LT(promocodeFunc.check)
       .event({
-        path: { id: '1' },
+        path: { userId: '1' },
         body: demoCheck
       })
       .expectResult((result) => {
@@ -359,7 +359,7 @@ describe('checking check promocode', () => {
     demoCheck.promocode = '';
     return LT(promocodeFunc.check)
       .event({
-        path: { id: '1' },
+        path: { userId: '1' },
         body: demoCheck
       })
       .expectError((error) => {
@@ -371,7 +371,7 @@ describe('checking check promocode', () => {
     demoCheck.promocode = '';
     return LT(promocodeFunc.check)
       .event({
-        path: { id: '1' },
+        path: { userId: '1' },
         body: {}
       })
       .expectError((error) => {
@@ -382,7 +382,7 @@ describe('checking check promocode', () => {
   it('when check promocode for new user with invalid id', () => {
     return LT(promocodeFunc.check)
       .event({
-        path: { id: 1 },
+        path: { userId: 1 },
         body: demoCheck
       })
       .expectError();
@@ -392,7 +392,7 @@ describe('checking check promocode', () => {
     delete process.env.IS_OFFLINE;
     return LT(promocodeFunc.check)
       .event({
-        path: { id: 1 },
+        path: { userId: 1 },
         body: demoCheck
       })
       .expectError((error) => {
