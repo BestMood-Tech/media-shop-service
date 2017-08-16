@@ -1,13 +1,21 @@
 import { config } from 'aws-sdk';
 import { Dynamo } from '../api/helper';
+import { safeLoad } from 'js-yaml';
+import { readFileSync } from 'fs';
+import { normalize, join } from 'path';
+
 
 export class HelperForTests extends Dynamo {
+  yaml;
+  serverlessFilePath = normalize(join(__dirname, '../serverless.yaml'));
+
   constructor() {
+    super(true);
     config.update({
       accessKeyId: 'YOURKEY',
       secretAccessKey: 'YOURSECRET',
     });
-    super(true);
+    this.yaml = safeLoad(readFileSync(this.serverlessFilePath, 'utf8'));
   }
 
   public removeItemFromTable(tableName, done?) {
@@ -35,5 +43,9 @@ export class HelperForTests extends Dynamo {
             });
         });
       });
+  }
+
+  public getEnvVar(tableName) {
+    return this.yaml.provider.environment[tableName];
   }
 }

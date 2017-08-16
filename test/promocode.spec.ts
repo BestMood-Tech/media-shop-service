@@ -9,16 +9,16 @@ describe('checking create promocode', () => {
 
   const demoNewUser: CreateBody = {
     isNewUser: true,
-    orderCount: 0
+    orderCount: 0,
   };
 
   const demoOldUser: CreateBody = {
     isNewUser: false,
-    orderCount: 0
+    orderCount: 0,
   };
 
   before((done) => {
-    process.env.PROMOCODE_TABLE = 'bmt-media-shop-service-promocode';
+    process.env.PROMOCODE_TABLE = HFT.getEnvVar('PROMOCODE_TABLE');
     process.env.IS_OFFLINE = 'true';
     HFT.removeItemFromTable(process.env.PROMOCODE_TABLE, done);
   });
@@ -32,7 +32,7 @@ describe('checking create promocode', () => {
     return LT(promocodeFunc.create)
       .event({
         path: { userId: '1' },
-        body: demoNewUser
+        body: demoNewUser,
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(10);
@@ -43,7 +43,7 @@ describe('checking create promocode', () => {
     return LT(promocodeFunc.create)
       .event({
         path: { userId: '1' },
-        body: demoOldUser
+        body: demoOldUser,
       })
       .expectError((error) => {
         expect(error.message).to.equal('[400] Not new user must have order count a multiple of five.');
@@ -54,7 +54,7 @@ describe('checking create promocode', () => {
     return LT(promocodeFunc.create)
       .event({
         path: { userId: 1 },
-        body: demoNewUser
+        body: demoNewUser,
       })
       .expectError();
   });
@@ -64,7 +64,7 @@ describe('checking create promocode', () => {
     return LT(promocodeFunc.create)
       .event({
         path: { userId: '1' },
-        body: demoOldUser
+        body: demoOldUser,
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(20);
@@ -76,7 +76,7 @@ describe('checking create promocode', () => {
     return LT(promocodeFunc.create)
       .event({
         path: { userId: '1' },
-        body: demoOldUser
+        body: demoOldUser,
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(30);
@@ -88,7 +88,7 @@ describe('checking create promocode', () => {
     return LT(promocodeFunc.create)
       .event({
         path: { userId: '1' },
-        body: demoOldUser
+        body: demoOldUser,
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(40);
@@ -100,7 +100,7 @@ describe('checking create promocode', () => {
     return LT(promocodeFunc.create)
       .event({
         path: { userId: '1' },
-        body: demoOldUser
+        body: demoOldUser,
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(50);
@@ -112,7 +112,7 @@ describe('checking create promocode', () => {
     return LT(promocodeFunc.create)
       .event({
         path: { userId: '1' },
-        body: demoOldUser
+        body: demoOldUser,
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(50);
@@ -124,7 +124,7 @@ describe('checking create promocode', () => {
     return LT(promocodeFunc.create)
       .event({
         path: { userId: '1' },
-        body: demoNewUser
+        body: demoNewUser,
       })
       .expectError((error) => {
         expect(error.message).to.equal('[500] Server error. Please try later (can not create a promocode)');
@@ -135,16 +135,16 @@ describe('checking create promocode', () => {
 describe('checking get promocode', () => {
   const demoNewUser: CreateBody = {
     isNewUser: true,
-    orderCount: 0
+    orderCount: 0,
   };
 
   const demoOldUser: CreateBody = {
     isNewUser: false,
-    orderCount: 5
+    orderCount: 5,
   };
 
   before((done) => {
-    process.env.PROMOCODE_TABLE = 'bmt-media-shop-service-promocode';
+    process.env.PROMOCODE_TABLE = HFT.getEnvVar('PROMOCODE_TABLE');
     process.env.IS_OFFLINE = 'true';
     HFT.removeItemFromTable(process.env.PROMOCODE_TABLE, done);
   });
@@ -158,7 +158,7 @@ describe('checking get promocode', () => {
     return LT(promocodeFunc.create)
       .event({
         path: { userId: '1' },
-        body: demoNewUser
+        body: demoNewUser,
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(10);
@@ -168,7 +168,7 @@ describe('checking get promocode', () => {
   it('when get promocode for new user', () => {
     return LT(promocodeFunc.get)
       .event({
-        path: { userId: '1' }
+        path: { userId: '1' },
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(10);
@@ -180,7 +180,7 @@ describe('checking get promocode', () => {
     return LT(promocodeFunc.create)
       .event({
         path: { userId: '1' },
-        body: demoOldUser
+        body: demoOldUser,
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(20);
@@ -190,7 +190,7 @@ describe('checking get promocode', () => {
   it('when get promocode for old user', () => {
     return LT(promocodeFunc.get)
       .event({
-        path: { userId: '1' }
+        path: { userId: '1' },
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(20);
@@ -201,7 +201,7 @@ describe('checking get promocode', () => {
   it('when get promocode for user than dont exist', () => {
     return LT(promocodeFunc.get)
       .event({
-        path: { userId: '2' }
+        path: { userId: '2' },
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(0);
@@ -213,7 +213,7 @@ describe('checking get promocode', () => {
     return LT(promocodeFunc.get)
       .event({
         path: { userId: 1 },
-        body: demoNewUser
+        body: demoNewUser,
       })
       .expectError();
   });
@@ -223,10 +223,10 @@ describe('checking get promocode', () => {
     return LT(promocodeFunc.get)
       .event({
         path: { userId: 1 },
-        body: demoNewUser
+        body: demoNewUser,
       })
       .expectError((error) => {
-        expect(error.message).to.equal('[500] Server error. Please try later (can not get a promocode)')
+        expect(error.message).to.equal('[500] Server error. Please try later (can not get a promocode)');
       });
   });
 });
@@ -234,11 +234,11 @@ describe('checking get promocode', () => {
 describe('checking remove promocode', () => {
   const demoNewUser: CreateBody = {
     isNewUser: true,
-    orderCount: 0
+    orderCount: 0,
   };
 
   before((done) => {
-    process.env.PROMOCODE_TABLE = 'bmt-media-shop-service-promocode';
+    process.env.PROMOCODE_TABLE = HFT.getEnvVar('PROMOCODE_TABLE');
     process.env.IS_OFFLINE = 'true';
     HFT.removeItemFromTable(process.env.PROMOCODE_TABLE, done);
   });
@@ -252,7 +252,7 @@ describe('checking remove promocode', () => {
     return LT(promocodeFunc.create)
       .event({
         path: { userId: '1' },
-        body: demoNewUser
+        body: demoNewUser,
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(10);
@@ -262,7 +262,7 @@ describe('checking remove promocode', () => {
   it('when delete promocode for new user', () => {
     return LT(promocodeFunc.remove)
       .event({
-        path: { userId: '1' }
+        path: { userId: '1' },
       })
       .expectResult((result) => {
         expect(result.message).to.equal('Promocode is deleted');
@@ -272,7 +272,7 @@ describe('checking remove promocode', () => {
   it('when delete promocode for user than dont exist', () => {
     return LT(promocodeFunc.remove)
       .event({
-        path: { userId: '2' }
+        path: { userId: '2' },
       })
       .expectResult((result) => {
         expect(result.message).to.equal('Promocode is deleted');
@@ -283,7 +283,7 @@ describe('checking remove promocode', () => {
     return LT(promocodeFunc.remove)
       .event({
         path: { userId: 1 },
-        body: demoNewUser
+        body: demoNewUser,
       })
       .expectError();
   });
@@ -292,7 +292,7 @@ describe('checking remove promocode', () => {
     delete process.env.IS_OFFLINE;
     return LT(promocodeFunc.remove)
       .event({
-        path: { userId: '2' }
+        path: { userId: '2' },
       })
       .expectError((error) => {
         expect(error.message).to.equal('[500] Server error. Please try later (can not remove a promocode)');
@@ -302,16 +302,16 @@ describe('checking remove promocode', () => {
 
 describe('checking check promocode', () => {
   const demoCheck: CheckBody = {
-    promocode: ''
+    promocode: '',
   };
 
   const demoNewUser: CreateBody = {
     isNewUser: true,
-    orderCount: 0
+    orderCount: 0,
   };
 
   before((done) => {
-    process.env.PROMOCODE_TABLE = 'bmt-media-shop-service-promocode';
+    process.env.PROMOCODE_TABLE = HFT.getEnvVar('PROMOCODE_TABLE');
     process.env.IS_OFFLINE = 'true';
     HFT.removeItemFromTable(process.env.PROMOCODE_TABLE, done);
   });
@@ -325,7 +325,7 @@ describe('checking check promocode', () => {
     return LT(promocodeFunc.create)
       .event({
         path: { userId: '1' },
-        body: demoNewUser
+        body: demoNewUser,
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(10);
@@ -335,7 +335,7 @@ describe('checking check promocode', () => {
   it('get promocode for new user before check', () => {
     return LT(promocodeFunc.get)
       .event({
-        path: { userId: '1' }
+        path: { userId: '1' },
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(10);
@@ -348,7 +348,7 @@ describe('checking check promocode', () => {
     return LT(promocodeFunc.check)
       .event({
         path: { userId: '1' },
-        body: demoCheck
+        body: demoCheck,
       })
       .expectResult((result) => {
         expect(result.percent).to.equal(10);
@@ -360,7 +360,7 @@ describe('checking check promocode', () => {
     return LT(promocodeFunc.check)
       .event({
         path: { userId: '1' },
-        body: demoCheck
+        body: demoCheck,
       })
       .expectError((error) => {
         expect(error.message).to.equal('[400] Invalid promocode');
@@ -372,7 +372,7 @@ describe('checking check promocode', () => {
     return LT(promocodeFunc.check)
       .event({
         path: { userId: '1' },
-        body: {}
+        body: {},
       })
       .expectError((error) => {
         expect(error.message).to.equal('[400] Body must have a promocode.');
@@ -383,7 +383,7 @@ describe('checking check promocode', () => {
     return LT(promocodeFunc.check)
       .event({
         path: { userId: 1 },
-        body: demoCheck
+        body: demoCheck,
       })
       .expectError();
   });
@@ -393,7 +393,7 @@ describe('checking check promocode', () => {
     return LT(promocodeFunc.check)
       .event({
         path: { userId: 1 },
-        body: demoCheck
+        body: demoCheck,
       })
       .expectError((error) => {
         expect(error.message).to.equal('[500] Server error. Please try later (can not check a promocode)');
