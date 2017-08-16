@@ -4,6 +4,18 @@ import * as LT from 'lambda-tester';
 import { HelperForTests } from './helper';
 
 const HFT = new HelperForTests();
+
+function beforeTests(done) {
+  process.env.USER_TABLE = HFT.getEnvVar('USER_TABLE');
+  process.env.IS_OFFLINE = 'true';
+  HFT.removeItemFromTable(process.env.USER_TABLE, done);
+}
+
+function afterTests() {
+  delete process.env.USER_TABLE;
+  delete process.env.IS_OFFLINE;
+}
+
 describe('checking add and get profile in db', () => {
 
   const demoProfile = {
@@ -16,16 +28,8 @@ describe('checking add and get profile in db', () => {
     picture: 'https://avatars2.githubusercontent.com/u/26054782?v=4',
   };
 
-  before((done) => {
-    process.env.USERS_TABLE = HFT.getEnvVar('USERS_TABLE');
-    process.env.IS_OFFLINE = 'true';
-    HFT.removeItemFromTable(process.env.USERS_TABLE, done);
-  });
-
-  after(() => {
-    delete process.env.USERS_TABLE;
-    delete process.env.IS_OFFLINE;
-  });
+  before(beforeTests);
+  after(afterTests);
 
   it('when create profile with empty field', () => {
     const tmp = {
@@ -111,15 +115,8 @@ describe('checking add and get profile in db', () => {
 });
 
 describe(`getting all items from db`, () => {
-  before(() => {
-    process.env.USERS_TABLE = HFT.getEnvVar('USERS_TABLE');
-    process.env.IS_OFFLINE = 'true';
-  });
-
-  after(() => {
-    delete process.env.USERS_TABLE;
-    delete process.env.IS_OFFLINE;
-  });
+  before(beforeTests);
+  after(afterTests);
 
   it('getting all items', () => {
     return LT(profileFunc.getAll)
@@ -145,16 +142,8 @@ describe(`update profile`, () => {
     currency: '$',
     picture: 'https://avatars2.githubusercontent.com/u/26054782?v=4',
   };
-  before((done) => {
-    process.env.USERS_TABLE = HFT.getEnvVar('USERS_TABLE');
-    process.env.IS_OFFLINE = 'true';
-    HFT.removeItemFromTable(process.env.USERS_TABLE, done);
-  });
-
-  after(() => {
-    delete process.env.USERS_TABLE;
-    delete process.env.IS_OFFLINE;
-  });
+  before(beforeTests);
+  after(afterTests);
 
   it('create profile before update', () => {
     return LT(profileFunc.findOrCreate)

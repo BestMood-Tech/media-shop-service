@@ -29,7 +29,7 @@ export class ReviewManager extends Dynamo {
 
   static getParams(params?) {
     return Object.assign({
-      TableName: process.env.REVIEWS_TABLE as string,
+      TableName: process.env.REVIEW_TABLE as string,
     }, params || {});
   }
 }

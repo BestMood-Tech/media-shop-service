@@ -5,6 +5,18 @@ import { CheckBody, CreateBody } from '../api/promocode/promocode.manager';
 import { HelperForTests } from './helper';
 
 const HFT = new HelperForTests();
+
+function beforeTests(done) {
+  process.env.PROMOCODE_TABLE = HFT.getEnvVar('PROMOCODE_TABLE');
+  process.env.IS_OFFLINE = 'true';
+  HFT.removeItemFromTable(process.env.PROMOCODE_TABLE, done);
+}
+
+function afterTests() {
+  delete process.env.PROMOCODE_TABLE;
+  delete process.env.IS_OFFLINE;
+}
+
 describe('checking create promocode', () => {
 
   const demoNewUser: CreateBody = {
@@ -17,16 +29,8 @@ describe('checking create promocode', () => {
     orderCount: 0,
   };
 
-  before((done) => {
-    process.env.PROMOCODE_TABLE = HFT.getEnvVar('PROMOCODE_TABLE');
-    process.env.IS_OFFLINE = 'true';
-    HFT.removeItemFromTable(process.env.PROMOCODE_TABLE, done);
-  });
-
-  after(() => {
-    delete process.env.PROMOCODE_TABLE;
-    delete process.env.IS_OFFLINE;
-  });
+  before(beforeTests);
+  after(afterTests);
 
   it('when create promocode for new user', () => {
     return LT(promocodeFunc.create)
@@ -143,16 +147,8 @@ describe('checking get promocode', () => {
     orderCount: 5,
   };
 
-  before((done) => {
-    process.env.PROMOCODE_TABLE = HFT.getEnvVar('PROMOCODE_TABLE');
-    process.env.IS_OFFLINE = 'true';
-    HFT.removeItemFromTable(process.env.PROMOCODE_TABLE, done);
-  });
-
-  after(() => {
-    delete process.env.PROMOCODE_TABLE;
-    delete process.env.IS_OFFLINE;
-  });
+  before(beforeTests);
+  after(afterTests);
 
   it('create promocode for new user before get', () => {
     return LT(promocodeFunc.create)
@@ -237,16 +233,8 @@ describe('checking remove promocode', () => {
     orderCount: 0,
   };
 
-  before((done) => {
-    process.env.PROMOCODE_TABLE = HFT.getEnvVar('PROMOCODE_TABLE');
-    process.env.IS_OFFLINE = 'true';
-    HFT.removeItemFromTable(process.env.PROMOCODE_TABLE, done);
-  });
-
-  after(() => {
-    delete process.env.PROMOCODE_TABLE;
-    delete process.env.IS_OFFLINE;
-  });
+  before(beforeTests);
+  after(afterTests);
 
   it('create promocode for new user before get', () => {
     return LT(promocodeFunc.create)
@@ -310,16 +298,8 @@ describe('checking check promocode', () => {
     orderCount: 0,
   };
 
-  before((done) => {
-    process.env.PROMOCODE_TABLE = HFT.getEnvVar('PROMOCODE_TABLE');
-    process.env.IS_OFFLINE = 'true';
-    HFT.removeItemFromTable(process.env.PROMOCODE_TABLE, done);
-  });
-
-  after(() => {
-    delete process.env.PROMOCODE_TABLE;
-    delete process.env.IS_OFFLINE;
-  });
+  before(beforeTests);
+  after(afterTests);
 
   it('create promocode for new user before check', () => {
     return LT(promocodeFunc.create)

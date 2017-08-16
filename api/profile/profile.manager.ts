@@ -101,7 +101,7 @@ export class ProfileManager extends Dynamo {
 
   static getParams(params?) {
     return Object.assign({
-      TableName: process.env.USERS_TABLE as string,
+      TableName: process.env.USER_TABLE as string,
     }, params || {});
   }
 }

@@ -13,6 +13,14 @@ provider:
         - s3:GetObject
         - s3:PutObject
         - s3:PutObjectAcl
+        - s3:ListBucket
+        - s3:DeleteObject
+        - s3:ListMultipartUploadParts
+        - s3:RestoreObject
+      Condition:
+        StringEquals:
+          s3:x-amz-acl:
+          - public-read-write
       Resource:
         Fn::Join:
           - ""
@@ -31,10 +39,10 @@ provider:
   environment:
     BUCKET: ${self:service}-templates
     PDF_BUCKET: ${self:service}-pdf
-    REVIEWS_TABLE: ${self:service}-table-review
+    REVIEW_TABLE: ${self:service}-review
     PROMOCODE_TABLE: ${self:service}-promocode
-    USERS_TABLE: ${self:service}-users
-    ORDERS_TABLE: ${self:service}-orders
+    USER_TABLE: ${self:service}-user
+    ORDER_TABLE: ${self:service}-order
 
 package:
   include:
@@ -50,6 +58,9 @@ custom:
     port: 8800
     directory: /tmp
     cors: true
+  s3Sync:
+    - bucketName: ${self:provider.environment.BUCKET}
+      localDir: templates
 
 functions:
   auth:
@@ -327,7 +338,7 @@ resources:
     UsersDynamoDb:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.USERS_TABLE}
+        TableName: ${self:provider.environment.USER_TABLE}
         AttributeDefinitions:
           - AttributeName: id
             AttributeType: S
@@ -343,7 +354,7 @@ resources:
     ReviewsDynamoDBTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:provider.environment.REVIEWS_TABLE}
+        TableName: ${self:provider.environment.REVIEW_TABLE}
         AttributeDefinitions:
           -
             AttributeName: id
@@ -373,9 +384,10 @@ resources:
               WriteCapacityUnits: 1
             StreamSpecification:
               StreamViewType: NEW_AND_OLD_IMAGES
-            TableName: ${self:provider.environment.ORDERS_TABLE}
+            TableName: ${self:provider.environment.ORDER_TABLE}
 plugins:
   - serverless-plugin-typescript
   - serverless-dynamodb-local
   - serverless-s3-local
   - serverless-offline
+  - serverless-s3-sync

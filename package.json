@@ -72,6 +72,7 @@
     "jsonwebtoken": "7.4.2",
     "mustache": "2.3.0",
     "serverless-dynamodb-local": "0.2.24",
+    "serverless-s3-sync": "^1.2.0",
     "wkhtmltopdf": "0.3.4"
   }
 }

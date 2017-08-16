@@ -84,7 +84,7 @@ export class OrderManager extends Dynamo {
 
   static getParams(params?) {
     return Object.assign({
-      TableName: process.env.ORDERS_TABLE as string,
+      TableName: process.env.ORDER_TABLE as string,
     }, params || {});
   }
 
