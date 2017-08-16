@@ -13,14 +13,7 @@ provider:
         - s3:GetObject
         - s3:PutObject
         - s3:PutObjectAcl
-        - s3:ListBucket
         - s3:DeleteObject
-        - s3:ListMultipartUploadParts
-        - s3:RestoreObject
-      Condition:
-        StringEquals:
-          s3:x-amz-acl:
-          - public-read-write
       Resource:
         Fn::Join:
           - ""
@@ -58,9 +51,6 @@ custom:
     port: 8800
     directory: /tmp
     cors: true
-  s3Sync:
-    - bucketName: ${self:provider.environment.BUCKET}
-      localDir: templates
   remover:
      buckets:
        - ${self:provider.environment.BUCKET}
@@ -394,5 +384,4 @@ plugins:
   - serverless-dynamodb-local
   - serverless-s3-local
   - serverless-offline
-  - serverless-s3-sync
   - serverless-s3-remover

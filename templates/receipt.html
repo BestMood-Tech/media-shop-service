@@ -125,26 +125,26 @@
     <div class="section">
         <div class="bill">
             <h4>BILL TO:</h4>
-            <p>{{user.name}}</p>
-            <p>{{address.streetAddress}}</p>
-            <p>{{address.addressLine2}}</p>
-            <p>{{address.city}}, {{address.state}}</p>
-            <p>{{address.country}}, {{address.zip}}</p>
-            <p>{{user.email}}</p>
+            <p>{{createdBy.name}}</p>
+            <p>{{addressOrder.streetAddress}}</p>
+            <p>{{addressOrder.addressLine2}}</p>
+            <p>{{addressOrder.city}}, {{addressOrder.state}}</p>
+            <p>{{addressOrder.country}}, {{addressOrder.zip}}</p>
+            <p>{{createdBy.email}}</p>
         </div>
         <div class="price-table">
             <table cellspacing="0">
                 <tr>
                     <td>INVOICE #</td>
-                    <td class="h-fw-300">{{number}}</td>
+                    <td class="h-fw-300">{{id}}</td>
                 </tr>
                 <tr>
                     <td>INVOICE DATE</td>
-                    <td class="h-fw-300">{{date}}</td>
+                    <td class="h-fw-300">{{createdAt}}</td>
                 </tr>
                 <tr>
                   <td>Payment method</td>
-                  <td class="h-fw-300">{{payment}}</td>
+                  <td class="h-fw-300">{{formProfile.payment}}</td>
                 </tr>
                 <tr class="b-gray">
                     <td>AMOUNT DUE</td>
@@ -156,7 +156,7 @@
     <div class="table-items">
         <table cellspacing="0">
             <tr class="b-gray">
-                <td>Item</td>
+                <td>Product</td>
                 <td>Description</td>
                 <td>Quantity</td>
                 <td>Unit Cost({{currency}})</td>
@@ -164,8 +164,8 @@
             </tr>
           {{#products}}
             <tr>
-              <td>{{title}}</td>
-              <td>{{desc}}</td>
+              <td>{{name}}</td>
+              <td>{{description}}</td>
               <td>{{count}}</td>
               <td>{{price}}</td>
               <td>{{total}}</td>

@@ -31,14 +31,25 @@ export class InvoiceManager extends Dynamo {
   }
 
   private putInvoiceToS3(id, data, awsRequestId): Promise<any> {
-    return this.s3.putObject({
+    const params = {
       Bucket: process.env.PDF_BUCKET as string,
       Key: id,
       Body: data,
       ContentType: 'application/pdf',
       ACL: 'public-read-write',
       Metadata: { 'x-amz-meta-requestId': awsRequestId },
-    }).promise();
+    };
+
+    return this.s3.putObject(params).promise();
+  }
+
+  public exists(id: string): Promise<boolean> {
+    const params = {
+      Bucket: process.env.PDF_BUCKET as string,
+      Key: id
+    };
+
+    return this.s3.headObject(params).promise().then(data => !!data);
   }
 
   static generatePdf(rendered, orderId): Promise<any> {

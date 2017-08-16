@@ -11,6 +11,16 @@ export class ProfileManager extends Dynamo {
       .then(data => data.Items.map(item => new Profile(item)));
   }
 
+  public getById(id: string) {
+    const params = ProfileManager.getParams({
+      Key: {
+        id,
+      },
+    });
+    return this.db.get(params).promise()
+      .then((data) => data.Item);
+  }
+
   public getByToken(socialId: string, social: string): Promise<Profile> {
     const params = ProfileManager.getParams({
       FilterExpression: 'socialId = :socialId and social = :social',
