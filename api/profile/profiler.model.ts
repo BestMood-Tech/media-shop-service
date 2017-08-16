@@ -10,7 +10,6 @@ export class Profile {
   public currency: string;
   public name: string;
   public nickName: string;
-  public orders: string;
   public picture: string;
   public address: string;
 
@@ -24,7 +23,6 @@ export class Profile {
       this.name = data.name;
       this.currency = data.currency;
       this.nickName = data.nickName;
-      this.orders = data.orders;
       this.picture = data.picture;
       this.address = data.address;
     }

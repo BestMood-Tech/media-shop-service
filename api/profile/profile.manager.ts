@@ -26,10 +26,7 @@ export class ProfileManager extends Dynamo {
         if (!profiles.length) {
           return Promise.reject({ statusCode: 404, message: `An item could not be found with id: ${socialId}` });
         }
-        return {
-          statusCode: 200,
-          body: profiles.pop(),
-        }
+        return profiles.pop();
       });
   }
 

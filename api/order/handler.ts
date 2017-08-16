@@ -1,14 +1,23 @@
 import { OrderManager } from './order.manager';
 import { errorHandler, log } from '../helper';
+import { ProfileManager } from '../profile/profile.manager';
 
 export function createOrder(event, context, callback) {
   const data = event.body;
+  const [social, id] = event.principalId.split('|');
 
   log('Create Order. Incoming data: ', data);
 
   const manager = new OrderManager();
-  manager.create(data)
-    .then((data) => callback(null, data))
+  const profileManager = new ProfileManager();
+  profileManager.getByToken(id, social)
+    .then(profile => {
+      data.createdAt = (new Date()).toISOString();
+      data.createdBy = profile.id;
+      console.log('----->', data, profile)
+      return manager.create(data);
+    })
+    .then((result) => callback(null, result))
     .catch(errorHandler(callback));
 }
 

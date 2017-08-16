@@ -76,7 +76,7 @@ functions:
     handler: api/invoice/handler.print
     events:
       - http:
-          path: invoice/print/{id}
+          path: api/invoice/print/{id}
           method: get
           integration: lambda
           cors: true
@@ -95,7 +95,7 @@ functions:
     handler: api/promocode/handler.create
     events:
       - http:
-          path: promocode/{userId}
+          path: api/promocode/{userId}
           method: post
           integration: lambda
           cors: true
@@ -113,7 +113,7 @@ functions:
       handler: api/promocode/handler.check
       events:
         - http:
-            path: promocode/{userId}
+            path: api/promocode/{userId}
             method: put
             integration: lambda
             cors: true
@@ -130,7 +130,7 @@ functions:
       handler: api/promocode/handler.get
       events:
         - http:
-            path: promocode/{userId}
+            path: api/promocode/{userId}
             method: get
             integration: lambda
             cors: true
@@ -147,7 +147,7 @@ functions:
     handler: api/promocode/handler.remove
     events:
       - http:
-          path: promocode/{userId}
+          path: api/promocode/{userId}
           method: delete
           integration: lambda
           cors: true

@@ -19,7 +19,7 @@ export class OrderManager extends Dynamo {
     const params = OrderManager.getParams({
       Item: order,
     });
-
+    console.log('order', order)
     return this.db.put(params).promise().then(() => order);
   }
 
@@ -57,11 +57,11 @@ export class OrderManager extends Dynamo {
       });
   }
 
-  public getByProfileId(id): Promise<Order[]> {
+  public getByProfileId(id: string): Promise<Order[]> {
     const params = OrderManager.getParams({
       FilterExpression: 'createdBy = :id',
       ExpressionAttributeValues: {
-        ':id': id.toString(),
+        ':id': id,
       },
     });
 
