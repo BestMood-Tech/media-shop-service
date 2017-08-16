@@ -1,4 +1,4 @@
-import { Profile } from '../auth/profile';
+import { ProfileManager } from '../profile/profile.manager';
 import { PromocodeManager } from '../promocode/promocode.manager';
 import { Order } from './order.model';
 import { Dynamo } from '../helper';
@@ -6,11 +6,11 @@ import { Dynamo } from '../helper';
 const faker = require('faker');
 
 export class OrderManager extends Dynamo {
-  private user: Profile;
+  private profileManager: ProfileManager;
 
   constructor() {
     super();
-    this.user = new Profile();
+    this.profileManager = new ProfileManager();
   }
 
   /************* Public methods ********* ****/
@@ -42,7 +42,7 @@ export class OrderManager extends Dynamo {
 
     const pOrders = this.db.scan(params).promise().then(data => data.Items.map(item => new Order(item)));
 
-    return Promise.all([this.user.getAll(), pOrders])
+    return Promise.all([this.profileManager.getAll(), pOrders])
       .then(([profiles, orders]) => {
         console.log('data from usersTable = ', profiles);
         console.log('data from ordersTable = ', orders);
