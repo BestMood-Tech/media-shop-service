@@ -7,7 +7,7 @@ import { normalize, join } from 'path';
 
 export class HelperForTests extends Dynamo {
   yaml;
-  serverlessFilePath = normalize(join(__dirname, '../serverless.yaml'));
+  serverlessFilePath = normalize(join(__dirname, '../serverless.yml'));
 
   constructor() {
     super(true);
