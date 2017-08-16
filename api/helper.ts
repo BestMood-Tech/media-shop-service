@@ -26,6 +26,11 @@ export function removeFilePromise(tmpFileLocation): Promise<any> {
   });
 }
 
+export function log(...args) {
+  if(process.env.IS_OFFLINE) { return; }
+  console.log(args);
+}
+
 export class Dynamo {
   protected db;
   constructor(IS_OFFLINE?) {

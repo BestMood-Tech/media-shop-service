@@ -1,10 +1,10 @@
 import { OrderManager } from './order.manager';
-import { errorHandler } from '../helper';
+import { errorHandler, log } from '../helper';
 
 export function createOrder(event, context, callback) {
   const data = event.body;
 
-  console.log('Create Order. Incoming data: ', data);
+  log('Create Order. Incoming data: ', data);
 
   const manager = new OrderManager();
   manager.create(data)
@@ -17,7 +17,7 @@ export function getByRangeDates(event, context, callback) {
   const to = event.query.to ? `${event.query.to}-11-31` : '2017-12-31';
   const fakeNumber = OrderManager.randomNumber(100);
 
-  console.log('GetByRangeDates. Incoming data: \n', 'from: ', from, '\n to: ', to);
+  log('GetByRangeDates. Incoming data: \n', 'from: ', from, '\n to: ', to);
 
   const manager = new OrderManager();
 
@@ -29,7 +29,7 @@ export function getByRangeDates(event, context, callback) {
 export function getByProfileId(event, context, callback) {
   const id = event.path.id;
 
-  console.log('GetByProfileId. Incoming data: \n', 'id: ', id);
+  log('GetByProfileId. Incoming data: \n', 'id: ', id);
 
   const manager = new OrderManager();
   manager.getByProfileId(id)
@@ -39,7 +39,7 @@ export function getByProfileId(event, context, callback) {
 
 export function getById(event, context, callback) {
   const id = event.path.id;
-  console.log('GetById. Incoming data: \n', 'id: ', id);
+  log('GetById. Incoming data: \n', 'id: ', id);
 
   const manager = new OrderManager();
   manager.getById(id)

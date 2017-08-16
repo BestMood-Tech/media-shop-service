@@ -1,14 +1,14 @@
 import { CheckBody, CreateBody, PromocodeData, PromocodeManager } from './promocode.manager';
-import { errorHandler } from '../helper';
+import { errorHandler, log } from '../helper';
 
 export function create(event, context, callback) {
   const userId = event.path.userId;
 
-  console.log('userId: ', userId);
+  log('userId: ', userId);
 
   const data: CreateBody = event.body;
 
-  console.log('data: ', data);
+  log('data: ', data);
 
   let percent: number;
 
@@ -38,7 +38,7 @@ export function create(event, context, callback) {
 
   promocode.create(userId, percent)
     .then((data) => {
-      console.log('------------->', JSON.stringify(data));
+      log('------------->', JSON.stringify(data));
       callback(null, { percent: percent })
     })
     .catch(errorHandler(callback, '[500] Server error. Please try later (can not create a promocode)'));
@@ -47,11 +47,11 @@ export function create(event, context, callback) {
 export function check(event, context, callback) {
   const userId = event.path.userId;
 
-  console.log('userId: ', userId);
+  log('userId: ', userId);
 
   const data: CheckBody = event.body;
 
-  console.log('data: ', data);
+  log('data: ', data);
 
   if (!data.hasOwnProperty('promocode')) {
     return callback('[400] Body must have a promocode.');
@@ -67,7 +67,7 @@ export function check(event, context, callback) {
 export function get(event, context, callback) {
   const userId = event.path.userId;
 
-  console.log('userId: ', userId);
+  log('userId: ', userId);
 
   const promocode: PromocodeManager = new PromocodeManager();
 
@@ -81,7 +81,7 @@ export function get(event, context, callback) {
 export function remove(event, context, callback){
   const userId = event.path.userId;
 
-  console.log('userId:', userId);
+  log('userId:', userId);
 
   const promocode: PromocodeManager = new PromocodeManager();
   promocode.remove(userId)

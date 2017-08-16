@@ -1,5 +1,5 @@
 import { ProfileManager } from './profile.manager';
-import { errorHandler } from '../helper';
+import { errorHandler, log } from '../helper';
 
 export function getAll(event, context, callback) {
   const manager = new ProfileManager();
@@ -12,7 +12,7 @@ export function findOrCreate(event, context, callback) {
   const [social, id] = event.principalId.split('|');
   const user = event.body;
 
-  console.log('FindOrCreate Profile. Incoming data: ', '\nsocial: ', social, ' id: ', id, '\nbody: ', user);
+  log('FindOrCreate Profile. Incoming data: ', '\nsocial: ', social, ' id: ', id, '\nbody: ', user);
 
   const manager = new ProfileManager();
 
@@ -28,7 +28,7 @@ export function update(event, context, callback) {
   const id = event.path.id;
   const body = event.body;
 
-  console.log('Update Profile. Incoming data: ', ' \nid: ', id, '\nbody: ', body);
+  log('Update Profile. Incoming data: ', ' \nid: ', id, '\nbody: ', body);
 
   const manager = new ProfileManager();
 
