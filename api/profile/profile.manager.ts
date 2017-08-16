@@ -19,6 +19,7 @@ export class ProfileManager extends Dynamo {
         ':social': social,
       },
     });
+    console.log('------> ', params)
     return this.db.scan(params).promise()
       .then(data => data.Items.map(item => new Profile(item)))
       .then((profiles: Profile[]) => {
