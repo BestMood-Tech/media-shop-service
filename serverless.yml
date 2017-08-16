@@ -61,6 +61,10 @@ custom:
   s3Sync:
     - bucketName: ${self:provider.environment.BUCKET}
       localDir: templates
+  remover:
+     buckets:
+       - ${self:provider.environment.BUCKET}
+       - ${self:provider.environment.PDF_BUCKET}
 
 functions:
   auth:
@@ -391,3 +395,4 @@ plugins:
   - serverless-s3-local
   - serverless-offline
   - serverless-s3-sync
+  - serverless-s3-remover
