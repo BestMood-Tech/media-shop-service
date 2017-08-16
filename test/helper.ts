@@ -4,6 +4,10 @@ import { safeLoad } from 'js-yaml';
 import { readFileSync } from 'fs';
 import { normalize, join } from 'path';
 
+config.update({
+  accessKeyId: 'YOURKEY',
+  secretAccessKey: 'YOURSECRET',
+});
 
 export class HelperForTests extends Dynamo {
   yaml;
@@ -11,10 +15,6 @@ export class HelperForTests extends Dynamo {
 
   constructor() {
     super(true);
-    config.update({
-      accessKeyId: 'YOURKEY',
-      secretAccessKey: 'YOURSECRET',
-    });
     this.yaml = safeLoad(readFileSync(this.serverlessFilePath, 'utf8'));
   }
 
