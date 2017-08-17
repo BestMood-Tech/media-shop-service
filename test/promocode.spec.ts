@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as LT from 'lambda-tester';
-import * as promocodeFunc from '../api/promocode/handler';
-import { CheckBody, CreateBody } from '../api/promocode/promocode.manager';
+import * as promocodeHandler from '../api/promocode/handler';
+import { CheckBody, CreateBody, PromocodeManager } from '../api/promocode/promocode.manager';
 import { HelperForTests } from './helper';
 
 const HFT = new HelperForTests();
@@ -33,7 +33,7 @@ describe('checking create promocode', () => {
   after(afterTests);
 
   it('when create promocode for new user', () => {
-    return LT(promocodeFunc.create)
+    return LT(promocodeHandler.create)
       .event({
         path: { userId: '1' },
         body: demoNewUser,
@@ -44,7 +44,7 @@ describe('checking create promocode', () => {
   });
 
   it('when create promocode for old user without orders', () => {
-    return LT(promocodeFunc.create)
+    return LT(promocodeHandler.create)
       .event({
         path: { userId: '1' },
         body: demoOldUser,
@@ -55,7 +55,7 @@ describe('checking create promocode', () => {
   });
 
   it('when create promocode for new user with invalid id', () => {
-    return LT(promocodeFunc.create)
+    return LT(promocodeHandler.create)
       .event({
         path: { userId: 1 },
         body: demoNewUser,
@@ -65,7 +65,7 @@ describe('checking create promocode', () => {
 
   it('when create promocode for old user with 5 orders', () => {
     demoOldUser.orderCount = 5;
-    return LT(promocodeFunc.create)
+    return LT(promocodeHandler.create)
       .event({
         path: { userId: '1' },
         body: demoOldUser,
@@ -77,7 +77,7 @@ describe('checking create promocode', () => {
 
   it('when create promocode for old user with 10 orders', () => {
     demoOldUser.orderCount = 10;
-    return LT(promocodeFunc.create)
+    return LT(promocodeHandler.create)
       .event({
         path: { userId: '1' },
         body: demoOldUser,
@@ -89,7 +89,7 @@ describe('checking create promocode', () => {
 
   it('when create promocode for old user with 15 orders', () => {
     demoOldUser.orderCount = 15;
-    return LT(promocodeFunc.create)
+    return LT(promocodeHandler.create)
       .event({
         path: { userId: '1' },
         body: demoOldUser,
@@ -101,7 +101,7 @@ describe('checking create promocode', () => {
 
   it('when create promocode for old user with 20 orders', () => {
     demoOldUser.orderCount = 20;
-    return LT(promocodeFunc.create)
+    return LT(promocodeHandler.create)
       .event({
         path: { userId: '1' },
         body: demoOldUser,
@@ -113,7 +113,7 @@ describe('checking create promocode', () => {
 
   it('when create promocode for old user more then 20 orders', () => {
     demoOldUser.orderCount = 25;
-    return LT(promocodeFunc.create)
+    return LT(promocodeHandler.create)
       .event({
         path: { userId: '1' },
         body: demoOldUser,
@@ -125,7 +125,7 @@ describe('checking create promocode', () => {
 
   it('when create promocode for new user and DB is offline', () => {
     delete process.env.IS_OFFLINE;
-    return LT(promocodeFunc.create)
+    return LT(promocodeHandler.create)
       .event({
         path: { userId: '1' },
         body: demoNewUser,
@@ -151,7 +151,7 @@ describe('checking get promocode', () => {
   after(afterTests);
 
   it('create promocode for new user before get', () => {
-    return LT(promocodeFunc.create)
+    return LT(promocodeHandler.create)
       .event({
         path: { userId: '1' },
         body: demoNewUser,
@@ -162,7 +162,7 @@ describe('checking get promocode', () => {
   });
 
   it('when get promocode for new user', () => {
-    return LT(promocodeFunc.get)
+    return LT(promocodeHandler.get)
       .event({
         path: { userId: '1' },
       })
@@ -173,7 +173,7 @@ describe('checking get promocode', () => {
   });
 
   it('create promocode for old user before get', () => {
-    return LT(promocodeFunc.create)
+    return LT(promocodeHandler.create)
       .event({
         path: { userId: '1' },
         body: demoOldUser,
@@ -184,7 +184,7 @@ describe('checking get promocode', () => {
   });
 
   it('when get promocode for old user', () => {
-    return LT(promocodeFunc.get)
+    return LT(promocodeHandler.get)
       .event({
         path: { userId: '1' },
       })
@@ -195,7 +195,7 @@ describe('checking get promocode', () => {
   });
 
   it('when get promocode for user than dont exist', () => {
-    return LT(promocodeFunc.get)
+    return LT(promocodeHandler.get)
       .event({
         path: { userId: '2' },
       })
@@ -206,7 +206,7 @@ describe('checking get promocode', () => {
   });
 
   it('when get promocode for new user with invalid id', () => {
-    return LT(promocodeFunc.get)
+    return LT(promocodeHandler.get)
       .event({
         path: { userId: 1 },
         body: demoNewUser,
@@ -216,7 +216,7 @@ describe('checking get promocode', () => {
 
   it('when get promocode for new user and DB is offline', () => {
     delete process.env.IS_OFFLINE;
-    return LT(promocodeFunc.get)
+    return LT(promocodeHandler.get)
       .event({
         path: { userId: 1 },
         body: demoNewUser,
@@ -237,7 +237,7 @@ describe('checking remove promocode', () => {
   after(afterTests);
 
   it('create promocode for new user before get', () => {
-    return LT(promocodeFunc.create)
+    return LT(promocodeHandler.create)
       .event({
         path: { userId: '1' },
         body: demoNewUser,
@@ -248,7 +248,7 @@ describe('checking remove promocode', () => {
   });
 
   it('when delete promocode for new user', () => {
-    return LT(promocodeFunc.remove)
+    return LT(promocodeHandler.remove)
       .event({
         path: { userId: '1' },
       })
@@ -258,7 +258,7 @@ describe('checking remove promocode', () => {
   });
 
   it('when delete promocode for user than dont exist', () => {
-    return LT(promocodeFunc.remove)
+    return LT(promocodeHandler.remove)
       .event({
         path: { userId: '2' },
       })
@@ -268,7 +268,7 @@ describe('checking remove promocode', () => {
   });
 
   it('when delete promocode for new user with invalid id', () => {
-    return LT(promocodeFunc.remove)
+    return LT(promocodeHandler.remove)
       .event({
         path: { userId: 1 },
         body: demoNewUser,
@@ -278,7 +278,7 @@ describe('checking remove promocode', () => {
 
   it('when delete promocode for user and DB is offline', () => {
     delete process.env.IS_OFFLINE;
-    return LT(promocodeFunc.remove)
+    return LT(promocodeHandler.remove)
       .event({
         path: { userId: '2' },
       })
@@ -302,7 +302,7 @@ describe('checking check promocode', () => {
   after(afterTests);
 
   it('create promocode for new user before check', () => {
-    return LT(promocodeFunc.create)
+    return LT(promocodeHandler.create)
       .event({
         path: { userId: '1' },
         body: demoNewUser,
@@ -313,7 +313,7 @@ describe('checking check promocode', () => {
   });
 
   it('get promocode for new user before check', () => {
-    return LT(promocodeFunc.get)
+    return LT(promocodeHandler.get)
       .event({
         path: { userId: '1' },
       })
@@ -325,7 +325,7 @@ describe('checking check promocode', () => {
   });
 
   it('when check promocode for user', () => {
-    return LT(promocodeFunc.check)
+    return LT(promocodeHandler.check)
       .event({
         path: { userId: '1' },
         body: demoCheck,
@@ -337,7 +337,7 @@ describe('checking check promocode', () => {
 
   it('when check promocode for user with invalid promocode', () => {
     demoCheck.promocode = '';
-    return LT(promocodeFunc.check)
+    return LT(promocodeHandler.check)
       .event({
         path: { userId: '1' },
         body: demoCheck,
@@ -349,7 +349,7 @@ describe('checking check promocode', () => {
 
   it('when check promocode for user without promocode', () => {
     demoCheck.promocode = '';
-    return LT(promocodeFunc.check)
+    return LT(promocodeHandler.check)
       .event({
         path: { userId: '1' },
         body: {},
@@ -360,7 +360,7 @@ describe('checking check promocode', () => {
   });
 
   it('when check promocode for new user with invalid id', () => {
-    return LT(promocodeFunc.check)
+    return LT(promocodeHandler.check)
       .event({
         path: { userId: 1 },
         body: demoCheck,
@@ -370,7 +370,7 @@ describe('checking check promocode', () => {
 
   it('when check promocode for new user and DB is offline', () => {
     delete process.env.IS_OFFLINE;
-    return LT(promocodeFunc.check)
+    return LT(promocodeHandler.check)
       .event({
         path: { userId: 1 },
         body: demoCheck,
@@ -378,5 +378,13 @@ describe('checking check promocode', () => {
       .expectError((error) => {
         expect(error.message).to.equal('[500] Server error. Please try later (can not check a promocode)');
       });
+  });
+});
+
+describe('checking promocode manager get params', () => {
+  it('when create params without params', () => {
+    const params = PromocodeManager.getParams();
+    expect(params.Item).to.equal(undefined);
+    expect(params.TableName).to.equal(process.env.PROMOCODE_TABLE);
   });
 });
