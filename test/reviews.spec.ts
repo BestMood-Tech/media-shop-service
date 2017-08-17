@@ -1,9 +1,21 @@
-import * as reviewsFunc from '../api/reviews/handler';
+import * as reviewsFunc from '../api/review/handler';
 import { expect } from 'chai';
 import * as LT from 'lambda-tester';
 import { HelperForTests } from './helper';
 
 const HFT = new HelperForTests();
+
+function beforeTests(done) {
+  process.env.REVIEW_TABLE = HFT.getEnvVar('REVIEW_TABLE');
+  process.env.IS_OFFLINE = 'true';
+  HFT.removeItemFromTable(process.env.REVIEW_TABLE, done);
+}
+
+function afterTests() {
+  delete process.env.REVIEW_TABLE;
+  delete process.env.IS_OFFLINE;
+}
+
 describe('checking work with reviews', () => {
   const demoNewReview = {
     username: 'Test username',
@@ -17,16 +29,8 @@ describe('checking work with reviews', () => {
     text: 'Error text'
   };
 
-  before((done) => {
-    process.env.REVIEWS_TABLE = 'bmt-media-shop-service-table-reviews';
-    process.env.IS_OFFLINE = 'true';
-    HFT.removeItemFromTable(process.env.REVIEWS_TABLE, done);
-  });
-
-  after(() => {
-    delete process.env.REVIEWS_TABLE;
-    delete process.env.IS_OFFLINE;
-  });
+  before(beforeTests);
+  after(afterTests);
 
   it('when create new review', () => {
     return LT(reviewsFunc.add)
@@ -34,7 +38,7 @@ describe('checking work with reviews', () => {
         body: demoNewReview
       })
       .expectResult((result) => {
-        expect(result.message).to.equal('Success');
+        expect(result.username).to.equal('Test username');
       });
   });
 
@@ -45,7 +49,7 @@ describe('checking work with reviews', () => {
       })
       .expectError((error) => {
         console.log(error.message);
-        expect(error.message).to.equal('[400] Body must have a username.');
+        expect(error.message).to.equal('[400] One or more parameter values were invalid: An AttributeValue may not contain an empty string');
       })
   });
 
@@ -62,11 +66,11 @@ describe('checking work with reviews', () => {
   it('when get review without productID', () => {
     return LT(reviewsFunc.getByProductID)
       .event({
-        path: { productID: null }
+        path: { }
       })
       .expectError((error) => {
         console.log(error.message);
-        expect(error.message).to.equal('[400] Body must have a productID.');
+        expect(error.message).to.equal('[400] ExpressionAttributeValues must not be empty');
       })
   });
 
@@ -77,7 +81,8 @@ describe('checking work with reviews', () => {
         body: demoNewReview
       })
       .expectError((error) => {
-        expect(error.message).to.equal('[500] Server error. Please try later');
+        console.log(error.message);
+        expect(error.message).to.equal('[500] Internal Server Error');
       })
   });
 
@@ -87,7 +92,7 @@ describe('checking work with reviews', () => {
         path: { productID: demoNewReview.productID }
       })
       .expectError((error) => {
-        expect(error.message).to.equal('[500] Server error. Please try later');
+        expect(error.message).to.equal('[500] Internal Server Error');
       })
   });
 
