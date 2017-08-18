@@ -1,7 +1,7 @@
 import { errorHandler, removeFilePromise, log } from '../helper';
 import { OrderManager } from '../order/order.manager';
 import { Order } from '../order/order.model';
-import { InvoiceManager } from './invioce.manager';
+import { InvoiceManager } from './invoice.manager';
 import { ProfileManager } from '../profile/profile.manager';
 
 export async function print(event, context, callback) {

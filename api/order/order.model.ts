@@ -7,7 +7,7 @@ export class Order {
   public tax: number;
   public currency: string;
   public grandTotal: number;
-  public formProfile;
+  public payment;
   public addressOrder;
   public createdAt: string;
   public createdBy: string;
@@ -18,7 +18,7 @@ export class Order {
     this.tax = data.tax;
     this.currency = data.total;
     this.grandTotal = data.grandTotal;
-    this.formProfile = data.formProfile;
+    this.payment = data.payment;
     this.addressOrder = data.addressOrder;
     this.createdAt = data.createdAt;
     this.createdBy = data.createdBy;

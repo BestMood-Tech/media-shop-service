@@ -1,5 +1,5 @@
 import { Dynamo } from '../helper';
-import { Profile } from './profiler.model';
+import { Profile } from './profile.model';
 
 export class ProfileManager extends Dynamo {
   constructor() {
