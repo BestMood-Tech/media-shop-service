@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
 #      - image: circleci/node:6.11.2
-      -image: ianwremmel/docker-node-jre
+      - image: ianwremmel/docker-node-jre
 
     working_directory: ~/repo
 
