@@ -48,8 +48,8 @@ export class OrderManager extends Dynamo {
         orders.forEach((order: Order) => {
           let profile = profiles.find((profile) => profile.id === order.createdBy);
           if (profile) {
-            order.formProfile.firstName = profile.firstName;
-            order.formProfile.lastName = profile.lastName;
+            order.profile.firstName = profile.firstName;
+            order.profile.lastName = profile.lastName;
           }
         });
         return orders;

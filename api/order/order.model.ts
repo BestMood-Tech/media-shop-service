@@ -7,18 +7,22 @@ export class Order {
   public tax: number;
   public currency: string;
   public grandTotal: number;
-  public payment;
+  public payment: string;
+  public promocode: string;
   public addressOrder;
   public createdAt: string;
   public createdBy: string;
+  public profile?: any;
+
   constructor(data) {
     this.id = data.id || uuid.v1();
     this.products = data.products;
     this.total = data.total;
     this.tax = data.tax;
-    this.currency = data.total;
+    this.currency = data.currency;
     this.grandTotal = data.grandTotal;
     this.payment = data.payment;
+    this.promocode = data.promocode;
     this.addressOrder = data.addressOrder;
     this.createdAt = data.createdAt;
     this.createdBy = data.createdBy;
