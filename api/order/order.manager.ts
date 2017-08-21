@@ -43,8 +43,8 @@ export class OrderManager extends Dynamo {
         orders.forEach((order: Order) => {
           let profile = profiles.find((profile) => profile.id === order.createdBy);
           if (profile) {
-            order.profile.firstName = profile.firstName;
-            order.profile.lastName = profile.lastName;
+            order.firstName = profile.firstName;
+            order.lastName = profile.lastName;
           }
         });
         return orders;
@@ -83,22 +83,19 @@ export class OrderManager extends Dynamo {
       formedOrders.push(new Order({
         products: OrderManager.fakeProducts(),
         total: OrderManager.randomNumber(1000),
-        formProfile: {
-          promoCode: PromocodeManager.generatePromocode(5),
-          address: OrderManager.fakeAddress(),
-          payment: OrderManager.randomKeyPayment(),
-          firstName: faker.name.firstName(),
-          lastName: faker.name.lastName(),
-        },
+        promocode: PromocodeManager.generatePromocode(5),
+        payment: OrderManager.randomKeyPayment(),
+        firstName: faker.name.firstName(),
+        lastName: faker.name.lastName(),
         addressOrder: OrderManager.fakeAddress(),
-        createdAt: new Date(faker.date.between(from || '2017-01-01T20:57:36.159Z', to || '2017-06-01T20:57:36.159Z')),
+        createdAt: new Date(faker.date.between(from || '2014-01-01', to || '2017-06-01')),
       }));
     }
     return Promise.resolve(formedOrders);
   }
 
   static randomNumber(max): number {
-    return Math.floor(Math.random() * (max + 1));
+    return Math.floor(Math.random() * (max + 1) + 10);
   }
 
   static randomKeyType(): string {

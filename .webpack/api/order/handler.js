@@ -28565,7 +28565,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var helper_1 = __webpack_require__(26);
-var profiler_model_1 = __webpack_require__(611);
+var profile_model_1 = __webpack_require__(611);
 var ProfileManager = (function (_super) {
     __extends(ProfileManager, _super);
     function ProfileManager() {
@@ -28573,7 +28573,7 @@ var ProfileManager = (function (_super) {
     }
     ProfileManager.prototype.getAll = function () {
         return this.db.scan(helper_1.getParams('USER_TABLE', {})).promise()
-            .then(function (data) { return data.Items.map(function (item) { return new profiler_model_1.Profile(item); }); });
+            .then(function (data) { return data.Items.map(function (item) { return new profile_model_1.Profile(item); }); });
     };
     ProfileManager.prototype.getById = function (id) {
         var params = helper_1.getParams('USER_TABLE', {
@@ -28593,7 +28593,7 @@ var ProfileManager = (function (_super) {
             },
         });
         return this.db.scan(params).promise()
-            .then(function (data) { return data.Items.map(function (item) { return new profiler_model_1.Profile(item); }); })
+            .then(function (data) { return data.Items.map(function (item) { return new profile_model_1.Profile(item); }); })
             .then(function (profiles) { return profiles.pop(); });
     };
     ProfileManager.prototype.findOrCreate = function (socialId, social, user) {
@@ -28609,7 +28609,7 @@ var ProfileManager = (function (_super) {
         });
     };
     ProfileManager.prototype.create = function (socialId, social, userData) {
-        var profile = new profiler_model_1.Profile({
+        var profile = new profile_model_1.Profile({
             socialId: socialId,
             social: social,
             firstName: userData.firstName,
@@ -28669,12 +28669,14 @@ var Profile = (function () {
         this.social = data.social;
         this.firstName = data.firstName;
         this.lastName = data.lastName;
-        this.country = data.country;
-        this.name = data.name;
-        this.currency = data.currency;
         this.nickName = data.nickName;
         this.picture = data.picture;
+        this.country = data.country;
+        this.currency = data.currency;
+        this.email = data.email;
         this.address = data.address;
+        this.mobile = data.mobile;
+        this.phone = data.phone;
     }
     return Profile;
 }());
@@ -29042,8 +29044,8 @@ var OrderManager = (function (_super) {
             orders.forEach(function (order) {
                 var profile = profiles.find(function (profile) { return profile.id === order.createdBy; });
                 if (profile) {
-                    order.formProfile.firstName = profile.firstName;
-                    order.formProfile.lastName = profile.lastName;
+                    order.firstName = profile.firstName;
+                    order.lastName = profile.lastName;
                 }
             });
             return orders;
@@ -29075,21 +29077,18 @@ var OrderManager = (function (_super) {
             formedOrders.push(new order_model_1.Order({
                 products: OrderManager.fakeProducts(),
                 total: OrderManager.randomNumber(1000),
-                formProfile: {
-                    promoCode: promocode_manager_1.PromocodeManager.generatePromocode(5),
-                    address: OrderManager.fakeAddress(),
-                    payment: OrderManager.randomKeyPayment(),
-                    firstName: faker.name.firstName(),
-                    lastName: faker.name.lastName(),
-                },
+                promocode: promocode_manager_1.PromocodeManager.generatePromocode(5),
+                payment: OrderManager.randomKeyPayment(),
+                firstName: faker.name.firstName(),
+                lastName: faker.name.lastName(),
                 addressOrder: OrderManager.fakeAddress(),
-                createdAt: new Date(faker.date.between(from || '2017-01-01T20:57:36.159Z', to || '2017-06-01T20:57:36.159Z')),
+                createdAt: new Date(faker.date.between(from || '2014-01-01', to || '2017-06-01')),
             }));
         }
         return Promise.resolve(formedOrders);
     };
     OrderManager.randomNumber = function (max) {
-        return Math.floor(Math.random() * (max + 1));
+        return Math.floor(Math.random() * (max + 1) + 10);
     };
     OrderManager.randomKeyType = function () {
         var type = ['music', 'game', 'movie'];
@@ -29143,12 +29142,15 @@ var Order = (function () {
         this.products = data.products;
         this.total = data.total;
         this.tax = data.tax;
-        this.currency = data.total;
+        this.currency = data.currency;
         this.grandTotal = data.grandTotal;
-        this.formProfile = data.formProfile;
+        this.payment = data.payment;
+        this.promocode = data.promocode;
         this.addressOrder = data.addressOrder;
         this.createdAt = data.createdAt;
         this.createdBy = data.createdBy;
+        this.firstName = data.firstName;
+        this.lastName = data.lastName;
     }
     return Order;
 }());
@@ -118304,7 +118306,7 @@ function getByRangeDates(event, context, callback) {
     var promises = [manager.getByRangeDates(from, to)];
     if (isFake) {
         var fakeNumber = order_manager_1.OrderManager.randomNumber(100);
-        promises.push(order_manager_1.OrderManager.makeFakeOrders(fakeNumber));
+        promises.push(order_manager_1.OrderManager.makeFakeOrders(fakeNumber, from, to));
     }
     Promise.all(promises)
         .then(function (result) { return callback(null, result[0].concat(result[1] || [])); })

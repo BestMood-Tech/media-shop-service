@@ -28565,7 +28565,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var helper_1 = __webpack_require__(26);
-var profiler_model_1 = __webpack_require__(611);
+var profile_model_1 = __webpack_require__(611);
 var ProfileManager = (function (_super) {
     __extends(ProfileManager, _super);
     function ProfileManager() {
@@ -28573,7 +28573,7 @@ var ProfileManager = (function (_super) {
     }
     ProfileManager.prototype.getAll = function () {
         return this.db.scan(helper_1.getParams('USER_TABLE', {})).promise()
-            .then(function (data) { return data.Items.map(function (item) { return new profiler_model_1.Profile(item); }); });
+            .then(function (data) { return data.Items.map(function (item) { return new profile_model_1.Profile(item); }); });
     };
     ProfileManager.prototype.getById = function (id) {
         var params = helper_1.getParams('USER_TABLE', {
@@ -28593,7 +28593,7 @@ var ProfileManager = (function (_super) {
             },
         });
         return this.db.scan(params).promise()
-            .then(function (data) { return data.Items.map(function (item) { return new profiler_model_1.Profile(item); }); })
+            .then(function (data) { return data.Items.map(function (item) { return new profile_model_1.Profile(item); }); })
             .then(function (profiles) { return profiles.pop(); });
     };
     ProfileManager.prototype.findOrCreate = function (socialId, social, user) {
@@ -28609,7 +28609,7 @@ var ProfileManager = (function (_super) {
         });
     };
     ProfileManager.prototype.create = function (socialId, social, userData) {
-        var profile = new profiler_model_1.Profile({
+        var profile = new profile_model_1.Profile({
             socialId: socialId,
             social: social,
             firstName: userData.firstName,
@@ -28669,12 +28669,14 @@ var Profile = (function () {
         this.social = data.social;
         this.firstName = data.firstName;
         this.lastName = data.lastName;
-        this.country = data.country;
-        this.name = data.name;
-        this.currency = data.currency;
         this.nickName = data.nickName;
         this.picture = data.picture;
+        this.country = data.country;
+        this.currency = data.currency;
+        this.email = data.email;
         this.address = data.address;
+        this.mobile = data.mobile;
+        this.phone = data.phone;
     }
     return Profile;
 }());
@@ -29042,8 +29044,8 @@ var OrderManager = (function (_super) {
             orders.forEach(function (order) {
                 var profile = profiles.find(function (profile) { return profile.id === order.createdBy; });
                 if (profile) {
-                    order.formProfile.firstName = profile.firstName;
-                    order.formProfile.lastName = profile.lastName;
+                    order.firstName = profile.firstName;
+                    order.lastName = profile.lastName;
                 }
             });
             return orders;
@@ -29075,21 +29077,18 @@ var OrderManager = (function (_super) {
             formedOrders.push(new order_model_1.Order({
                 products: OrderManager.fakeProducts(),
                 total: OrderManager.randomNumber(1000),
-                formProfile: {
-                    promoCode: promocode_manager_1.PromocodeManager.generatePromocode(5),
-                    address: OrderManager.fakeAddress(),
-                    payment: OrderManager.randomKeyPayment(),
-                    firstName: faker.name.firstName(),
-                    lastName: faker.name.lastName(),
-                },
+                promocode: promocode_manager_1.PromocodeManager.generatePromocode(5),
+                payment: OrderManager.randomKeyPayment(),
+                firstName: faker.name.firstName(),
+                lastName: faker.name.lastName(),
                 addressOrder: OrderManager.fakeAddress(),
-                createdAt: new Date(faker.date.between(from || '2017-01-01T20:57:36.159Z', to || '2017-06-01T20:57:36.159Z')),
+                createdAt: new Date(faker.date.between(from || '2014-01-01', to || '2017-06-01')),
             }));
         }
         return Promise.resolve(formedOrders);
     };
     OrderManager.randomNumber = function (max) {
-        return Math.floor(Math.random() * (max + 1));
+        return Math.floor(Math.random() * (max + 1) + 10);
     };
     OrderManager.randomKeyType = function () {
         var type = ['music', 'game', 'movie'];
@@ -29143,12 +29142,15 @@ var Order = (function () {
         this.products = data.products;
         this.total = data.total;
         this.tax = data.tax;
-        this.currency = data.total;
+        this.currency = data.currency;
         this.grandTotal = data.grandTotal;
-        this.formProfile = data.formProfile;
+        this.payment = data.payment;
+        this.promocode = data.promocode;
         this.addressOrder = data.addressOrder;
         this.createdAt = data.createdAt;
         this.createdBy = data.createdBy;
+        this.firstName = data.firstName;
+        this.lastName = data.lastName;
     }
     return Order;
 }());
@@ -118280,7 +118282,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var helper_1 = __webpack_require__(26);
 var order_manager_1 = __webpack_require__(617);
 var profile_manager_1 = __webpack_require__(609);
-var invioce_manager_1 = __webpack_require__(1799);
+var invoice_manager_1 = __webpack_require__(1799);
 function print(event, context, callback) {
     return __awaiter(this, void 0, void 0, function () {
         var orderId, manager, e_1, orderManager, profileManager, order, _a, err_1;
@@ -118289,14 +118291,14 @@ function print(event, context, callback) {
                 case 0:
                     orderId = event.path.id;
                     helper_1.log('Print Invoice. Incoming data: \n', 'orderId: ', orderId);
-                    manager = new invioce_manager_1.InvoiceManager();
+                    manager = new invoice_manager_1.InvoiceManager();
                     _b.label = 1;
                 case 1:
                     _b.trys.push([1, 3, , 12]);
                     return [4 /*yield*/, manager.exists(orderId)];
                 case 2:
                     _b.sent();
-                    return [2 /*return*/, callback(null, orderId)];
+                    return [2 /*return*/, callback(null, { id: orderId })];
                 case 3:
                     e_1 = _b.sent();
                     orderManager = new order_manager_1.OrderManager();
@@ -118318,14 +118320,14 @@ function print(event, context, callback) {
                     return [4 /*yield*/, manager.printOrder(order, context.awsRequestId)];
                 case 7:
                     _b.sent();
-                    return [4 /*yield*/, helper_1.removeFilePromise(invioce_manager_1.InvoiceManager.getFileLocation(orderId))];
+                    return [4 /*yield*/, helper_1.removeFilePromise(invoice_manager_1.InvoiceManager.getFileLocation(orderId))];
                 case 8:
                     _b.sent();
                     callback(null, { id: order.id });
                     return [3 /*break*/, 11];
                 case 9:
                     err_1 = _b.sent();
-                    return [4 /*yield*/, helper_1.removeFilePromise(invioce_manager_1.InvoiceManager.getFileLocation(orderId))];
+                    return [4 /*yield*/, helper_1.removeFilePromise(invoice_manager_1.InvoiceManager.getFileLocation(orderId))];
                 case 10:
                     _b.sent();
                     helper_1.errorHandler(callback)(err_1);

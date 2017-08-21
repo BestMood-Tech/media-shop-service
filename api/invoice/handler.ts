@@ -13,7 +13,7 @@ export async function print(event, context, callback) {
 
   try {
     await manager.exists(orderId);
-    return callback(null, orderId);
+    return callback(null, {id: orderId});
   } catch (e) {
     const orderManager = new OrderManager();
     const profileManager = new ProfileManager();
@@ -23,7 +23,7 @@ export async function print(event, context, callback) {
       product.description = product.description.substr(0, 130).replace(/([\uD800-\uDFFF].)|\n|([^\x00-\x7F])/g, ''),
         product.name = product.name.replace(/([\uD800-\uDFFF].)|([^\x00-\x7F])/g, '');
     });
-    order.createdBy = await profileManager.getById(order.createdBy);
+    order.createdBy = await profileManager.getById(order.createdBy as string);
 
     try {
       await manager.printOrder(order, context.awsRequestId);

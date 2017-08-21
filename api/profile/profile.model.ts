@@ -14,6 +14,7 @@ export class Profile {
   public address: string;
   public mobile: string;
   public phone: string;
+  public isNew?: boolean;
 
   constructor(data) {
     this.id = data.id || uuid.v1();

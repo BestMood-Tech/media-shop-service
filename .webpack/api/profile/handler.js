@@ -28565,7 +28565,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var helper_1 = __webpack_require__(26);
-var profiler_model_1 = __webpack_require__(611);
+var profile_model_1 = __webpack_require__(611);
 var ProfileManager = (function (_super) {
     __extends(ProfileManager, _super);
     function ProfileManager() {
@@ -28573,7 +28573,7 @@ var ProfileManager = (function (_super) {
     }
     ProfileManager.prototype.getAll = function () {
         return this.db.scan(helper_1.getParams('USER_TABLE', {})).promise()
-            .then(function (data) { return data.Items.map(function (item) { return new profiler_model_1.Profile(item); }); });
+            .then(function (data) { return data.Items.map(function (item) { return new profile_model_1.Profile(item); }); });
     };
     ProfileManager.prototype.getById = function (id) {
         var params = helper_1.getParams('USER_TABLE', {
@@ -28593,7 +28593,7 @@ var ProfileManager = (function (_super) {
             },
         });
         return this.db.scan(params).promise()
-            .then(function (data) { return data.Items.map(function (item) { return new profiler_model_1.Profile(item); }); })
+            .then(function (data) { return data.Items.map(function (item) { return new profile_model_1.Profile(item); }); })
             .then(function (profiles) { return profiles.pop(); });
     };
     ProfileManager.prototype.findOrCreate = function (socialId, social, user) {
@@ -28609,7 +28609,7 @@ var ProfileManager = (function (_super) {
         });
     };
     ProfileManager.prototype.create = function (socialId, social, userData) {
-        var profile = new profiler_model_1.Profile({
+        var profile = new profile_model_1.Profile({
             socialId: socialId,
             social: social,
             firstName: userData.firstName,
@@ -28669,12 +28669,14 @@ var Profile = (function () {
         this.social = data.social;
         this.firstName = data.firstName;
         this.lastName = data.lastName;
-        this.country = data.country;
-        this.name = data.name;
-        this.currency = data.currency;
         this.nickName = data.nickName;
         this.picture = data.picture;
+        this.country = data.country;
+        this.currency = data.currency;
+        this.email = data.email;
         this.address = data.address;
+        this.mobile = data.mobile;
+        this.phone = data.phone;
     }
     return Profile;
 }());

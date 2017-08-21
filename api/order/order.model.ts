@@ -1,3 +1,4 @@
+import { Profile } from '../profile/profile.model';
 const uuid = require('uuid');
 
 export class Order {
@@ -11,8 +12,9 @@ export class Order {
   public promocode: string;
   public addressOrder;
   public createdAt: string;
-  public createdBy: string;
-  public profile?: any;
+  public createdBy: string | Profile;
+  public firstName?: string;
+  public lastName?: string;
 
   constructor(data) {
     this.id = data.id || uuid.v1();
@@ -26,6 +28,8 @@ export class Order {
     this.addressOrder = data.addressOrder;
     this.createdAt = data.createdAt;
     this.createdBy = data.createdBy;
+    this.firstName = data.firstName;
+    this.lastName = data.lastName;
   }
 
 }
