@@ -1,0 +1,4 @@
+# ================== Main =====================
+
+auth:
+  handler: api/auth/handler.auth

@@ -1,6 +1,6 @@
-import { OrderManager } from './order.manager';
 import { errorHandler, log } from '../helper';
 import { ProfileManager } from '../profile/profile.manager';
+import { OrderManager } from './order.manager';
 
 export function createOrder(event, context, callback) {
   const data = event.body;

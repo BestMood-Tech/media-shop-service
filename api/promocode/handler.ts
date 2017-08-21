@@ -1,5 +1,5 @@
-import { CheckBody, CreateBody, PromocodeData, PromocodeManager } from './promocode.manager';
 import { errorHandler, log } from '../helper';
+import { CheckBody, CreateBody, PromocodeData, PromocodeManager } from './promocode.manager';
 
 export function create(event, context, callback) {
   const userId = event.path.userId;
@@ -73,12 +73,14 @@ export function get(event, context, callback) {
 
   promocode.getByUserId(userId)
     .then((data: PromocodeData) => callback(null,
-      { promocode: data && data.promocode ||'',
-        percent: data && data.percent || 0 }))
+      {
+        promocode: data && data.promocode || '',
+        percent: data && data.percent || 0
+      }))
     .catch(errorHandler(callback, '[500] Server error. Please try later (can not get a promocode)'));
 }
 
-export function remove(event, context, callback){
+export function remove(event, context, callback) {
   const userId = event.path.userId;
 
   log('userId:', userId);

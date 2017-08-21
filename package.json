@@ -6,7 +6,11 @@
   "scripts": {
     "start": "sls deploy",
     "test": "nyc --check-coverage mocha test/*.spec.ts",
-    "serverless-offline": "sls offline start"
+    "serverless-offline": "sls offline start",
+    "raml": "sls raml > documentation/docs.raml",
+    "ramlhtml": "raml2html documentation/docs.raml > documentation/index.html --theme 'raml2html-slate-theme'",
+    "documentation": "npm run raml && npm run ramlhtml",
+    "deploy": "npm start && npm run documentation && sls s3sync"
   },
   "nyc": {
     "check-coverage": true,
@@ -50,29 +54,41 @@
   "license": "ISC",
   "devDependencies": {
     "@types/chai": "4.0.2",
+    "@types/js-yaml": "^3.9.1",
     "@types/mocha": "2.2.41",
+    "@types/mustache": "0.8.29",
+    "@types/node": "8.0.19",
     "chai": "4.1.1",
+    "copy-webpack-plugin": "^4.0.1",
     "lambda-tester": "3.0.2",
     "mocha": "3.5.0",
     "nyc": "11.1.0",
     "serverless-offline": "3.15.3",
     "serverless-plugin-typescript": "1.0.0",
     "serverless-s3-local": "0.2.5",
+    "serverless-s3-sync": "^1.2.0",
+    "serverless-webpack": "^2.2.0",
     "source-map-support": "0.4.15",
+    "ts-loader": "^2.3.2",
     "ts-node": "3.3.0",
-    "typings": "2.1.1"
+    "typescript": "^2.4.2",
+    "typings": "2.1.1",
+    "raml-serverless": "^0.2.0",
+    "raml2html-slate-theme": "^2.1.2",
+    "raml2html": "^6.4.1",
+    "serverless-dir-config-plugin": "^0.1.5",
+    "serverless-dynamodb-local": "0.2.24",
+    "serverless-s3-remover": "^0.2.0",
+    "webpack": "^3.3.0",
+    "webpack-shell-plugin": "^0.5.0"
   },
   "dependencies": {
-    "@types/js-yaml": "^3.9.1",
-    "@types/mustache": "0.8.29",
-    "@types/node": "8.0.19",
     "aws-sdk": "2.94.0",
+    "dotenv": "4.0.0",
     "faker": "4.1.0",
     "js-yaml": "^3.9.1",
     "jsonwebtoken": "7.4.2",
     "mustache": "2.3.0",
-    "serverless-dynamodb-local": "0.2.24",
-    "serverless-s3-remover": "^0.2.0",
     "wkhtmltopdf": "0.3.4"
   }
 }

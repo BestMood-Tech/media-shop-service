@@ -9,11 +9,11 @@ export class Review {
   public text: string;
 
   constructor(data) {
-      this.id = data.id || uuid.v1();
-      this.username = data.username || '';
-      this.rate = data.rate || 0;
-      this.createDate = data.createDate;
-      this.productID = data.productID;
-      this.text = data.text;
+    this.id = data.id || uuid.v1();
+    this.username = data.username || '';
+    this.rate = data.rate || 0;
+    this.createDate = data.createDate;
+    this.productID = data.productID;
+    this.text = data.text;
   }
 }

@@ -1,15 +1,15 @@
+import { errorHandler, log } from '../helper';
 import { ReviewManager } from './review.manager';
 import { Review } from './review.model';
-import { errorHandler, log } from '../helper';
 
-export function add(event, context, callback) {
+export function create(event, context, callback) {
   const body = event.body;
 
   log('Add Review. Incoming data: \n', 'body: ', body);
 
   const manager = new ReviewManager();
 
-  manager.add(body)
+  manager.create(body)
     .then((review: Review) => callback(null, review))
     .catch(errorHandler(callback));
 }

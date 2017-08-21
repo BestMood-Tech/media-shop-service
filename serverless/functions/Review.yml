@@ -1,0 +1,74 @@
+# ================== Review =====================
+
+createReview:
+  handler: api/review/handler.create
+  events:
+    - http:
+        path: api/review
+        method: post
+        integration: lambda
+        cors: true
+        authorizer:
+          name: auth
+          resultTtlInSeconds: 0
+        response:
+          headers:
+            Access-Control-Allow-Origin: "'*'"
+            Content-Type: "'application/json'"
+          template: $input.json('$')
+        documentation:
+          raml:
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "id":"6122baf0-8422-11e7-9b85-c9067123f838",
+                        "username":"Oleg Skvortsov",
+                        "rate":5,
+                        "createDate":"2017-08-18T14:34:41.959Z",
+                        "productID":"movie315635",
+                        "text":"Example review"
+                      }
+
+getReviews:
+    handler: api/review/handler.getByProductID
+    events:
+      - http:
+          path: api/review/{productID}
+          method: get
+          integration: lambda
+          cors: true
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+              Content-Type: "'application/json'"
+            template: $input.json('$')
+          documentation:
+            raml:
+              responses:
+                200:
+                  body:
+                    application/json:
+                      example: |
+                        {
+                          "result":[
+                            {
+                              "id":"3062f550-8419-11e7-92b2-03c49649946d",
+                              "username":"Oleg Skvortsov",
+                              "rate":5,
+                              "createDate":"2017-08-18T13:28:56.452Z",
+                              "productID":"movie315635",
+                              "text":"two comment"
+                            },
+                            {
+                              "id":"a95069f0-8402-11e7-94bb-d7cc413dbe24",
+                              "username":"Oleg Skvortsov",
+                              "rate":5,
+                              "createDate":"2017-08-18T10:47:40.784Z",
+                              "productID":"movie315635",
+                              "text":"good movie"
+                            }
+                          ]
+                        }
