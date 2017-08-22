@@ -1,8 +1,7 @@
 import { expect } from 'chai';
 import * as LT from 'lambda-tester';
-import { getParams } from '../api/helper';
 import * as promocodeHandler from '../api/promocode/handler';
-import { CheckBody, CreateBody, PromocodeManager } from '../api/promocode/promocode.manager';
+import { CheckBody, CreateBody } from '../api/promocode/promocode.manager';
 import { HelperForTests } from './helper';
 
 const HFT = new HelperForTests();
