@@ -1,6 +1,9 @@
-import { errorHandler, log } from '../helper';
+import { Dynamo, errorHandler, log, removeFilePromise } from '../helper';
 import { ProfileManager } from '../profile/profile.manager';
 import { OrderManager } from './order.manager';
+import { Order } from './order.model';
+import { InvoiceManager } from '../invoice/invioce.manager';
+import { Nodemailer } from '../mailer.service';
 
 export function createOrder(event, context, callback) {
   const data = event.body;
@@ -59,6 +62,43 @@ export function getById(event, context, callback) {
   manager.getById(id)
     .then((data) => callback(null, data))
     .catch(errorHandler(callback));
+}
+
+export async function ordersTrigger(event, context, callback) {
+  let order = new Order(Dynamo.convert(event.Records[0]['dynamodb']['NewImage']));
+  const profileManager = new ProfileManager();
+
+  order.createdBy = await profileManager.getById(order.createdBy);
+
+  if (!order.createdBy['email']) {
+    return callback(null, null);
+  }
+
+  const manager = new InvoiceManager();
+  try {
+    await manager.exists(order.id);
+  } catch (e) {
+    order.products.forEach(product => {
+      product.description = product.description.substr(0, 130).replace(/([\uD800-\uDFFF].)|\n|([^\x00-\x7F])/g, ''),
+        product.name = product.name.replace(/([\uD800-\uDFFF].)|([^\x00-\x7F])/g, '');
+    });
+
+    try {
+      await manager.printOrder(order, context.awsRequestId);
+      callback(null, { id: order.id });
+    } catch (err) {
+      errorHandler(callback)(err);
+    } finally {
+      await removeFilePromise(InvoiceManager.getFileLocation(order.id));
+    }
+
+  } finally {
+    const nodemailer = new Nodemailer();
+    nodemailer.sendMailInvoiceLink(order.createdBy['email'], order.id)
+      .then((data) => callback(null, data))
+      .catch(errorHandler(callback))
+  }
+
 }
 
 

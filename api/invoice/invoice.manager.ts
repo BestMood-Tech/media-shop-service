@@ -77,4 +77,12 @@ export class InvoiceManager extends Dynamo {
   static getFileLocation(id): string {
     return `/tmp/rendered-${id}.pdf`;
   }
+
+  static reformatOrderProducts(order: Order) {
+    order.products.forEach(product => {
+      product.description = product.description.substr(0, 130).replace(/([\uD800-\uDFFF].)|\n|([^\x00-\x7F])/g, ''),
+        product.name = product.name.replace(/([\uD800-\uDFFF].)|([^\x00-\x7F])/g, '');
+    });
+    return order;
+  }
 }

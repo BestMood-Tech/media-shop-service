@@ -1,5 +1,5 @@
-import { DynamoDB } from 'aws-sdk';
 import { existsSync, readFile, unlink, } from 'fs';
+import { DynamoDB } from 'aws-sdk';
 
 export function errorHandler(callback, customMessage?) {
   return (err) => {
@@ -48,6 +48,10 @@ export class Dynamo {
     } else {
       this.db = new DynamoDB.DocumentClient();
     }
+  }
+
+  static convert(data) {
+    return DynamoDB.Converter.unmarshall(data);
   }
 }
 
