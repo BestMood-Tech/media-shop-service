@@ -105,7 +105,7 @@ export class OrderManager extends Dynamo {
 
   static randomKeyPayment(): string {
     let payment = ['PayPal', 'CreditCard', 'Cash', 'WebMoney', 'QIWI', 'Bitcoin'];
-    return payment[OrderManager.randomNumber(payment.length - 1)];
+    return payment[Math.floor(Math.random() * payment.length)];
   }
 
   static fakeAddress(): any {
