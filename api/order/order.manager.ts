@@ -82,7 +82,7 @@ export class OrderManager extends Dynamo {
     for (let i = 0; i < count; i++) {
       formedOrders.push(new Order({
         products: OrderManager.fakeProducts(),
-        total: OrderManager.randomNumber(1000),
+        total: OrderManager.randomNumber(100, 1000),
         promocode: PromocodeManager.generatePromocode(5),
         payment: OrderManager.randomKeyPayment(),
         firstName: faker.name.firstName(),
@@ -94,18 +94,18 @@ export class OrderManager extends Dynamo {
     return Promise.resolve(formedOrders);
   }
 
-  static randomNumber(max): number {
-    return Math.floor(Math.random() * (max + 1) + 10);
+  static randomNumber(min, max): number {
+    return Math.floor(Math.random() * (max + 1) + min);
   }
 
   static randomKeyType(): string {
     let type = ['music', 'game', 'movie'];
-    return type[OrderManager.randomNumber(type.length - 1)];
+    return type[OrderManager.randomNumber(0, type.length - 1)];
   }
 
   static randomKeyPayment(): string {
     let payment = ['PayPal', 'CreditCard', 'Cash', 'WebMoney', 'QIWI', 'Bitcoin'];
-    return payment[Math.floor(Math.random() * payment.length)];
+    return payment[OrderManager.randomNumber(0, payment.length - 1)];
   }
 
   static fakeAddress(): any {
@@ -121,7 +121,7 @@ export class OrderManager extends Dynamo {
 
   static fakeProducts(): any[] {
     let products: any[] = [];
-    let lastIndex = 2 + OrderManager.randomNumber(10);
+    let lastIndex = 2 + OrderManager.randomNumber(0, 10);
 
     for (let i = 0; i < lastIndex; i++) {
       products.push({
@@ -130,7 +130,7 @@ export class OrderManager extends Dynamo {
         name: faker.lorem.words(),
         cover: faker.image.imageUrl(),
         description: faker.lorem.paragraph(),
-        price: OrderManager.randomNumber(100),
+        price: OrderManager.randomNumber(10, 100),
       });
     }
     return products;

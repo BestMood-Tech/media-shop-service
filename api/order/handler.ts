@@ -31,7 +31,7 @@ export function getByRangeDates(event, context, callback) {
   let promises = [manager.getByRangeDates(from, to)];
 
   if (isFake) {
-    const fakeNumber = OrderManager.randomNumber(100);
+    const fakeNumber = OrderManager.randomNumber(10, 100);
     promises.push(OrderManager.makeFakeOrders(fakeNumber, from, to))
   }
 
