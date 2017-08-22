@@ -42,7 +42,7 @@
     ],
     "exclude": [
       "**/*.d.ts",
-      "**/invioce.manager.ts",
+      "**/invoice.manager.ts",
       "**/mailer.service.ts",
       "test/*",
       "tests"
