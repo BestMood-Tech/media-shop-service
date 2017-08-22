@@ -2,7 +2,7 @@ import { Dynamo, errorHandler, log, removeFilePromise } from '../helper';
 import { ProfileManager } from '../profile/profile.manager';
 import { OrderManager } from './order.manager';
 import { Order } from './order.model';
-import { InvoiceManager } from '../invoice/invioce.manager';
+import { InvoiceManager } from '../invoice/invoice.manager';
 import { Nodemailer } from '../mailer.service';
 
 export function createOrder(event, context, callback) {
@@ -68,7 +68,7 @@ export async function ordersTrigger(event, context, callback) {
   let order = new Order(Dynamo.convert(event.Records[0]['dynamodb']['NewImage']));
   const profileManager = new ProfileManager();
 
-  order.createdBy = await profileManager.getById(order.createdBy);
+  order.createdBy = await profileManager.getById(order.createdBy as string);
 
   if (!order.createdBy['email']) {
     return callback(null, null);
