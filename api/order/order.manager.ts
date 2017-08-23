@@ -80,16 +80,17 @@ export class OrderManager extends Dynamo {
     let formedOrders: any[] = [];
 
     for (let i = 0; i < count; i++) {
-      formedOrders.push(new Order({
+      const fakeOrder = new Order({
         products: OrderManager.fakeProducts(),
         total: OrderManager.randomNumber(100, 1000),
         promocode: PromocodeManager.generatePromocode(5),
         payment: OrderManager.randomKeyPayment(),
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName(),
         addressOrder: OrderManager.fakeAddress(),
         createdAt: new Date(faker.date.between(from || '2014-01-01', to || '2017-06-01')),
-      }));
+      });
+      fakeOrder.firstName = faker.name.firstName();
+      fakeOrder.lastName = faker.name.lastName();
+      formedOrders.push(fakeOrder);
     }
     return Promise.resolve(formedOrders);
   }

@@ -28,8 +28,6 @@ export class Order {
     this.addressOrder = data.addressOrder;
     this.createdAt = data.createdAt;
     this.createdBy = data.createdBy;
-    this.firstName = data.firstName;
-    this.lastName = data.lastName;
   }
 
 }
