@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: semerm/node-jre
+      - image: semerm/node-jre:0.1
 
     working_directory: ~/repo
 
