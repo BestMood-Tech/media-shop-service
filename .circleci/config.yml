@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: semerm/node-jre:0.1
+      - image: semerm/node-jre:0.2
 
     working_directory: ~/repo
 
@@ -21,7 +21,7 @@ jobs:
           - v1-dependencies-
 #      - run: sudo apt-get install default-jre
       - run: npm install -q
-      - run: sudo npm install mocha chai ts-node typings serverless -g -q
+#      - run: sudo npm install mocha chai ts-node typings serverless -g -q
       - run: typings install dt~mocha --global --save
       - run: typings install npm~chai --save
       - run: sls dynamodb install
