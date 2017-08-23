@@ -1,7 +1,7 @@
+import { Dynamo, getParams } from '../helper';
 import { ProfileManager } from '../profile/profile.manager';
 import { PromocodeManager } from '../promocode/promocode.manager';
 import { Order } from './order.model';
-import { Dynamo } from '../helper';
 
 const faker = require('faker');
 
@@ -16,19 +16,14 @@ export class OrderManager extends Dynamo {
   /************* Public methods ********* ****/
   public create(orderData): Promise<Order> {
     const order = new Order(orderData);
-    const params = OrderManager.getParams({
+    const params = getParams('ORDER_TABLE', {
       Item: order,
     });
     return this.db.put(params).promise().then(() => order);
   }
 
-  public getAll(): Promise<Order[]> {
-    return this.db.scan(OrderManager.getParams()).promise()
-      .then(data => data.Items.map(item => new Order(item)));
-  }
-
   public getByRangeDates(from: string, to: string): Promise<Order[]> {
-    const params = OrderManager.getParams({
+    const params = getParams('ORDER_TABLE', {
       FilterExpression: '#createdAt > :from AND #createdAt < :to',
       ExpressionAttributeNames: {
         '#createdAt': 'createdAt',
@@ -57,7 +52,7 @@ export class OrderManager extends Dynamo {
   }
 
   public getByProfileId(id: string): Promise<Order[]> {
-    const params = OrderManager.getParams({
+    const params = getParams('ORDER_TABLE', {
       FilterExpression: 'createdBy = :id',
       ExpressionAttributeValues: {
         ':id': id,
@@ -68,7 +63,7 @@ export class OrderManager extends Dynamo {
   }
 
   public getById(id) {
-    const params = OrderManager.getParams({
+    const params = getParams('ORDER_TABLE', {
       Key: {
         id,
       },
@@ -80,12 +75,6 @@ export class OrderManager extends Dynamo {
   /************* Private methods ********* ****/
 
   /************* Static methods ********* ****/
-
-  static getParams(params?) {
-    return Object.assign({
-      TableName: process.env.ORDER_TABLE as string,
-    }, params || {});
-  }
 
   static makeFakeOrders(count: number, from?: string, to?: string): Promise<Order[]> {
     let formedOrders: any[] = [];

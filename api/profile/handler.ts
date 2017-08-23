@@ -1,5 +1,5 @@
-import { ProfileManager } from './profile.manager';
 import { errorHandler, log } from '../helper';
+import { ProfileManager } from './profile.manager';
 import { Profile } from './profiler.model';
 
 export function getAll(event, context, callback) {
@@ -18,7 +18,7 @@ export function findOrCreate(event, context, callback) {
   const manager = new ProfileManager();
 
   manager.findOrCreate(id, social, user)
-    .then((data: Profile | any) => callback(null, data.statusCode? data : {body: data, statusCode: 200}))
+    .then((data: Profile | any) => callback(null, data))
     .catch(errorHandler(callback));
 }
 

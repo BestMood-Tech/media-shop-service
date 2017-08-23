@@ -1,14 +1,14 @@
+import { Dynamo, getParams } from '../helper';
 import { Review } from './review.model';
-import { Dynamo } from '../helper';
 
 export class ReviewManager extends Dynamo {
   constructor() {
     super();
   }
 
-  public add(data): Promise<Review> {
+  public create(data): Promise<Review> {
     let review = new Review(data);
-    const params = ReviewManager.getParams({
+    const params = getParams('REVIEW_TABLE', {
       Item: review,
     });
     return this.db.put(params).promise()
@@ -16,7 +16,7 @@ export class ReviewManager extends Dynamo {
   }
 
   public getByProductID(id): Promise<Review[]> {
-    const params = ReviewManager.getParams({
+    const params = getParams('REVIEW_TABLE', {
       FilterExpression: 'productID = :pID',
       ExpressionAttributeValues: {
         ':pID': id,
@@ -25,11 +25,5 @@ export class ReviewManager extends Dynamo {
 
     return this.db.scan(params).promise()
       .then((data) => data.Items.map(item => new Review(item)));
-  }
-
-  static getParams(params?) {
-    return Object.assign({
-      TableName: process.env.REVIEW_TABLE as string,
-    }, params || {});
   }
 }

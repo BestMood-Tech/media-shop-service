@@ -1,0 +1,121 @@
+# ================== Profile =====================
+
+getAllProfiles:
+  handler: api/profile/handler.getAll
+  events:
+    - http:
+        path: api/profiles
+        method: get
+        integration: lambda
+        cors: true
+        authorizer:
+          name: auth
+          resultTtlInSeconds: 0
+        response:
+          headers:
+            Access-Control-Allow-Origin: "'*'"
+            Content-Type: "'application/json'"
+          template: $input.json('$')
+        documentation:
+          raml:
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      [
+                        {
+                          "id":"30835c30-8335-11e7-9406-5b932ece1203",
+                          "isNew": false
+                          "socialId":"89146810",
+                          "social":"vkontakte",
+                          "firstName":"Oleg",
+                          "lastName":"Skvortsov",
+                          "currency":"$",
+                          "nickName":"id89146810",
+                          "picture":"https://pp.userapi.com/c636124/v636124810/16064/z8z7jYhf2uE.jpg",
+                          "address":[
+                            {
+                              "zip":"ddd",
+                              "country":"Algeria",
+                              "addressLine2":"dsa",
+                              "state":"sss",
+                              "streetAddress":"asd",
+                              "city":"aaa"
+                            }
+                          ]
+                        }
+                      ]
+
+getProfile:
+  handler: api/profile/handler.findOrCreate
+  events:
+    - http:
+        path: api/profile
+        method: post
+        integration: lambda
+        cors: true
+        authorizer:
+          name: auth
+          resultTtlInSeconds: 0
+        response:
+          headers:
+            Access-Control-Allow-Origin: "'*'"
+            Content-Type: "'application/json'"
+          template: $input.json('$')
+        documentation:
+          raml:
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "body":{
+                          "id":"30835c30-8335-11e7-9406-5b932ece1203",
+                          "isNew": false
+                          "socialId":"89146810",
+                          "social":"vkontakte",
+                          "firstName":"Oleg",
+                          "lastName":"Skvortsov",
+                          "currency":"$",
+                          "nickName":"id89146810",
+                          "picture":"https://pp.userapi.com/c636124/v636124810/16064/z8z7jYhf2uE.jpg",
+                          "address":[
+                            {
+                              "zip":"ddd",
+                              "country":"Algeria",
+                              "addressLine2":"dsa",
+                              "state":"sss",
+                              "streetAddress":"asd",
+                              "city":"aaa"
+                            }
+                          ]
+                        },
+                        "statusCode":200
+                      }
+
+updateProfile:
+  handler: api/profile/handler.update
+  events:
+    - http:
+        method: put
+        path: api/profile/{id}
+        cors: true
+        integration: lambda
+        authorizer:
+          name: auth
+          resultTtlInSeconds: 0
+        response:
+          headers:
+            Access-Control-Allow-Origin: "'*'"
+            Content-Type: "'application/json'"
+          template: $input.json('$')
+        documentation:
+          raml:
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      ""

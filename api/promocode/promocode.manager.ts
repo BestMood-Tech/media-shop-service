@@ -1,4 +1,4 @@
-import { Dynamo } from '../helper';
+import { Dynamo, getParams } from '../helper';
 
 export class PromocodeManager extends Dynamo {
   constructor() {
@@ -8,7 +8,7 @@ export class PromocodeManager extends Dynamo {
   public create(id: string, percent: number): Promise<any> {
     const promocode = PromocodeManager.generatePromocode(5);
 
-    const params = PromocodeManager.getParams({
+    const params = getParams('PROMOCODE_TABLE', {
       Item: {
         id,
         promocode,
@@ -20,7 +20,7 @@ export class PromocodeManager extends Dynamo {
   }
 
   public check(id: string, promocode: string): Promise<number> {
-    const params = PromocodeManager.getParams({
+    const params = getParams('PROMOCODE_TABLE', {
       Key: {
         id,
       },
@@ -36,8 +36,8 @@ export class PromocodeManager extends Dynamo {
       });
   }
 
-  public getByUserId (id: string): Promise<PromocodeData> {
-    const params = PromocodeManager.getParams({
+  public getByUserId(id: string): Promise<PromocodeData> {
+    const params = getParams('PROMOCODE_TABLE', {
       Key: {
         id,
       },
@@ -47,7 +47,7 @@ export class PromocodeManager extends Dynamo {
   }
 
   public remove(id: string): Promise<any> {
-    const params = PromocodeManager.getParams({
+    const params = getParams('PROMOCODE_TABLE', {
       Key: {
         id,
       },
@@ -64,12 +64,6 @@ export class PromocodeManager extends Dynamo {
     }
     code += '-TECH';
     return code;
-  }
-
-  static getParams(params?) {
-    return Object.assign({
-      TableName: process.env.PROMOCODE_TABLE as string,
-    }, params || {});
   }
 }
 

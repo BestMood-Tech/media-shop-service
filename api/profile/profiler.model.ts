@@ -12,18 +12,19 @@ export class Profile {
   public nickName: string;
   public picture: string;
   public address: string;
+  public isNew?: boolean;
 
   constructor(data) {
-      this.id = data.id || uuid.v1();
-      this.socialId = data.socialId;
-      this.social = data.social;
-      this.firstName = data.firstName;
-      this.lastName = data.lastName;
-      this.country = data.country;
-      this.name = data.name;
-      this.currency = data.currency;
-      this.nickName = data.nickName;
-      this.picture = data.picture;
-      this.address = data.address;
-    }
+    this.id = data.id || uuid.v1();
+    this.socialId = data.socialId;
+    this.social = data.social;
+    this.firstName = data.firstName;
+    this.lastName = data.lastName;
+    this.country = data.country;
+    this.name = data.name;
+    this.currency = data.currency;
+    this.nickName = data.nickName;
+    this.picture = data.picture;
+    this.address = data.address;
+  }
 }

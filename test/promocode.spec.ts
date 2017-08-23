@@ -1,7 +1,8 @@
 import { expect } from 'chai';
 import * as LT from 'lambda-tester';
+import { getParams } from '../api/helper';
 import * as promocodeHandler from '../api/promocode/handler';
-import { CheckBody, CreateBody, PromocodeManager } from '../api/promocode/promocode.manager';
+import { CheckBody, CreateBody } from '../api/promocode/promocode.manager';
 import { HelperForTests } from './helper';
 
 const HFT = new HelperForTests();
@@ -378,13 +379,5 @@ describe('checking check promocode', () => {
       .expectError((error) => {
         expect(error.message).to.equal('[500] Server error. Please try later (can not check a promocode)');
       });
-  });
-});
-
-describe('checking promocode manager get params', () => {
-  it('when create params without params', () => {
-    const params = PromocodeManager.getParams();
-    expect(params.Item).to.equal(undefined);
-    expect(params.TableName).to.equal(process.env.PROMOCODE_TABLE);
   });
 });

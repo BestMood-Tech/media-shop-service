@@ -11,6 +11,7 @@ export class Order {
   public addressOrder;
   public createdAt: string;
   public createdBy: string;
+
   constructor(data) {
     this.id = data.id || uuid.v1();
     this.products = data.products;

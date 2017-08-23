@@ -1,0 +1,110 @@
+# ================== Promocodes =====================
+
+createPromocode:
+  handler: api/promocode/handler.create
+  events:
+    - http:
+        path: api/promocode/{userId}
+        method: post
+        integration: lambda
+        cors: true
+        authorizer:
+          name: auth
+          resultTtlInSeconds: 0
+        response:
+          headers:
+            Access-Control-Allow-Origin: "'*'"
+            Content-Type: "'application/json'"
+          template: $input.json('$')
+        documentation:
+          raml:
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "percent":10
+                      }
+
+checkPromocode:
+    handler: api/promocode/handler.check
+    events:
+      - http:
+          path: api/promocode/{userId}
+          method: put
+          integration: lambda
+          cors: true
+          authorizer:
+            name: auth
+            resultTtlInSeconds: 0
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+              Content-Type: "'application/json'"
+            template: $input.json('$')
+          documentation:
+            raml:
+              responses:
+                200:
+                  body:
+                    application/json:
+                      example: |
+                        {
+                          "percent":10
+                        }
+
+getPromocode:
+    handler: api/promocode/handler.get
+    events:
+      - http:
+          path: api/promocode/{userId}
+          method: get
+          integration: lambda
+          cors: true
+          authorizer:
+            name: auth
+            resultTtlInSeconds: 0
+          response:
+            headers:
+              Access-Control-Allow-Origin: "'*'"
+              Content-Type: "'application/json'"
+            template: $input.json('$')
+          documentation:
+            raml:
+              responses:
+                200:
+                  body:
+                    application/json:
+                      example: |
+                        {
+                          "promocode":"BESTMOOD-zfDkF-TECH",
+                          "percent":10
+                        }
+
+removePromocode:
+  handler: api/promocode/handler.remove
+  events:
+    - http:
+        path: api/promocode/{userId}
+        method: delete
+        integration: lambda
+        cors: true
+        authorizer:
+          name: auth
+          resultTtlInSeconds: 0
+        response:
+          headers:
+            Access-Control-Allow-Origin: "'*'"
+            Content-Type: "'application/json'"
+          template: $input.json('$')
+        documentation:
+          raml:
+            responses:
+              200:
+                body:
+                  application/json:
+                    example: |
+                      {
+                        "message":"Promocode is deleted"
+                      }
