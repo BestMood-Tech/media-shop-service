@@ -6,7 +6,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/node:6.11.2
+      - image: semerm/node-jre:0.2
 
     working_directory: ~/repo
 
@@ -19,11 +19,9 @@ jobs:
           - v1-dependencies-{{ checksum "package.json" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
-      - run: sudo apt-get install default-jre
       - run: npm install -q
-      - run: sudo npm install mocha chai ts-node typings serverless -g -q
-      - run: sudo typings install dt~mocha --global --save
-      - run: sudo typings install npm~chai --save
+      - run: typings install dt~mocha --global --save
+      - run: typings install npm~chai --save
       - run: sls dynamodb install
       - save_cache:
           paths:
