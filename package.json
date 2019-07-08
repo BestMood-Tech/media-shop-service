@@ -10,7 +10,9 @@
     "raml": "sls raml > documentation/docs.raml",
     "ramlhtml": "raml2html documentation/docs.raml > documentation/index.html --theme 'raml2html-slate-theme'",
     "documentation": "npm run raml && npm run ramlhtml",
-    "deploy": "npm start && npm run documentation && sls s3sync"
+    "deploy": "npm start && npm run documentation && sls s3sync",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "nyc": {
     "check-coverage": true,
@@ -92,6 +94,8 @@
     "jsonwebtoken": "8.0.0",
     "mustache": "2.3.0",
     "wkhtmltopdf": "0.3.4",
-    "nodemailer": "^4.0.1"
-  }
+    "nodemailer": "^4.0.1",
+    "snyk": "^1.192.4"
+  },
+  "snyk": true
 }
